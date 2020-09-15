@@ -2,13 +2,19 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Vuex from 'vuex'
 import BootstrapVue from 'bootstrap-vue'
+import Main from "../components/Main.vue"
 
 Vue.use(BootstrapVue)
 Vue.use(Vuex)
 Vue.use(VueRouter)
 
 const routes = [
-  
+  {
+    path: "/",
+    name: "MAIN",
+    component: Main,
+  },
+
 ]
 
 const router = new VueRouter({
