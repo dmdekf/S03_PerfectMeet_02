@@ -32,7 +32,6 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>완벽한 맛남</v-toolbar-title>
     </v-app-bar>
-
     <v-main>
       <v-container
         class="fill-height"
@@ -44,24 +43,12 @@
         >
           <v-col class="text-center">
             <v-tooltip left>
-              <template v-slot:activator="{ on }">
-                <v-btn
-                  :href="source"
-                  icon
-                  large
-                  target="_blank"
-                  v-on="on"
-                >
-                  <v-icon large>mdi-code-tags</v-icon>
-                </v-btn>
-              </template>
-              <span>Source</span>
             </v-tooltip>
           </v-col>
         </v-row>
       </v-container>
     </v-main>
-    <router-view class="container  mx-10px"/>
+    <router-view class="container mx-10px"/>
     <v-footer
       id="footer"
       class="pa-0"
