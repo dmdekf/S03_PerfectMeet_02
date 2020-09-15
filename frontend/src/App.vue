@@ -1,60 +1,102 @@
 <template>
-  <v-app>
+  <v-app id="inspire">
+    <v-navigation-drawer
+      v-model="drawer"
+      app
+    >
+      <v-list dense>
+        <v-list-item link>
+          <v-list-item-action>
+            <v-icon>mdi-home</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Home</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item link>
+          <v-list-item-action>
+            <v-icon>mdi-email</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Contact</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+
     <v-app-bar
       app
-      color="primary"
+      color="deep-orange accent-3"
       dark
     >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-toolbar-title>완벽한 맛남</v-toolbar-title>
     </v-app-bar>
 
     <v-main>
-      <HelloWorld/>
+      <v-container
+        class="fill-height"
+        fluid
+      >
+        <v-row
+          align="center"
+          justify="center"
+        >
+          <v-col class="text-center">
+            <v-tooltip left>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  :href="source"
+                  icon
+                  large
+                  target="_blank"
+                  v-on="on"
+                >
+                  <v-icon large>mdi-code-tags</v-icon>
+                </v-btn>
+              </template>
+              <span>Source</span>
+            </v-tooltip>
+          </v-col>
+        </v-row>
+      </v-container>
     </v-main>
+    <v-footer
+      id="footer"
+      class="pa-0"
+      color="deep-orange accent-3"
+      app
+    >
+      <v-col
+        class="text-center"
+        cols="12"
+      >
+      <div class="white--text text-center">
+        &copy; {{ new Date().getFullYear() }} made by<a href="https://github.com/gyw8526"> @gyw8526 </a> <a href="https://github.com/dmdekf"> @dmdekf </a> <a href="https://lab.ssafy.com/lshmn951"> @lshmn951 </a> <a href="https://lab.ssafy.com/twoposition"> @wjsgudwls89 </a>
+      </div>
+      </v-col>
+    </v-footer>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
-
-export default {
-  name: 'App',
-
-  components: {
-    HelloWorld,
-  },
-
-  data: () => ({
-    //
-  }),
-};
+  export default {
+    props: {
+      source: String,
+    },
+    data: () => ({
+      drawer: null,
+    }),
+  }
 </script>
+
+<style>
+#footer {
+  opacity: 80%;
+}
+
+#footer a {
+  color:white; 
+}
+
+</style>
