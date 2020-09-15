@@ -61,6 +61,7 @@
         </v-row>
       </v-container>
     </v-main>
+    <router-view class="container  mx-10px"/>
     <v-footer
       id="footer"
       class="pa-0"
@@ -71,6 +72,7 @@
         class="text-center"
         cols="12"
       >
+      
       <div class="white--text text-center">
         &copy; {{ new Date().getFullYear() }} made by<a href="https://github.com/gyw8526"> @gyw8526 </a> <a href="https://github.com/dmdekf"> @dmdekf </a> <a href="https://lab.ssafy.com/lshmn951"> @lshmn951 </a> <a href="https://lab.ssafy.com/twoposition"> @wjsgudwls89 </a>
       </div>
