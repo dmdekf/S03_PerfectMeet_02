@@ -9,6 +9,7 @@ import com.POM.MatNam.user.dao.UserAuthDao;
 import com.POM.MatNam.user.dao.UserDao;
 import com.POM.MatNam.user.dto.LoginRequestDTO;
 import com.POM.MatNam.user.dto.SignupRequestDTO;
+import com.POM.MatNam.user.dto.UpdateRequestDTO;
 import com.POM.MatNam.user.dto.User;
 import com.POM.MatNam.user.dto.UserAuth;
 
@@ -30,10 +31,10 @@ public class UserService {
 		return userDao.save(user);
 	}
 	
-	public int duplicateCheck(SignupRequestDTO request) {
-		if(userDao.findByEmail(request.getEmail()).isPresent()) {
+	public int duplicateCheck(String email,String nickname) {
+		if(userDao.findByEmail(email).isPresent()) {
 			return 1;
-		}else if(userDao.findByNickname(request.getNickname()).isPresent()) {
+		}else if(userDao.findByNickname(nickname).isPresent()) {
 			return 2;
 		}
 		return 3;
@@ -55,6 +56,19 @@ public class UserService {
 	public void withdraw(String nickname) {
 		User user = userDao.findByNickname(nickname).get();
 		userDao.deleteById(user.getId());
+	}
+	public User update(UpdateRequestDTO request,String nickname) {
+		User user = new User();
+		User temp = selectByNickname(nickname);
+		user.setEmail(temp.getEmail());
+		user.setId(temp.getId());
+		user.setNickname(request.getNickname());
+		user.setPassword(request.getPassword());
+		user.setProfileImg(request.getProfileImg());
+		user.setAge(temp.getAge());
+		user.setGender(temp.isGender());
+		user = userDao.save(user);
+		return user;
 	}
 	public User selectByEmail(String email) {
 		return userDao.findByEmail(email).orElse(null);

@@ -11,8 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +24,7 @@ import com.POM.MatNam.response.BasicResponse;
 import com.POM.MatNam.response.ErrorResponse;
 import com.POM.MatNam.user.dto.LoginRequestDTO;
 import com.POM.MatNam.user.dto.SignupRequestDTO;
+import com.POM.MatNam.user.dto.UpdateRequestDTO;
 import com.POM.MatNam.user.dto.User;
 import com.POM.MatNam.user.service.UserService;
 
@@ -32,93 +36,138 @@ import lombok.val;
 public class UserController {
 	@Autowired
 	private UserService userService;
-	
+
 	@Transactional
 	@PostMapping
 	@ApiOperation(value = "회원 가입")
 	public Object signup(@Valid @RequestBody SignupRequestDTO request) {
 		ResponseEntity<BasicResponse> response = null;
 		Map<String, Object> errors = new HashMap<>();
-		int check = userService.duplicateCheck(request);
-		if(check==1) {
+		int check = userService.duplicateCheck(request.getEmail(), request.getNickname());
+		if (check == 1) {
 			errors.put("field", "email");
 			errors.put("data", request.getEmail());
 			final ErrorResponse result = setErrors("E-4001", "이미 존재하는 이메일입니다.", errors);
-			
+
 			response = new ResponseEntity<BasicResponse>(result, HttpStatus.CONFLICT);
-		}else if(check==2) {
+		} else if (check == 2) {
 			errors.put("field", "nickname");
 			errors.put("data", request.getNickname());
 			final ErrorResponse result = setErrors("E-4002", "이미 존재하는 닉네임입니다.", errors);
-			
+
 			response = new ResponseEntity<BasicResponse>(result, HttpStatus.CONFLICT);
-		}else {
+		} else {
 			User user = userService.signup(request);
 			final BasicResponse result = new BasicResponse();
 			result.status = "S-200";
 			result.message = "회원가입에 성공했습니다.";
 			response = new ResponseEntity<BasicResponse>(result, HttpStatus.CREATED);
-			
+
 		}
 		return response;
 	}
-	
+
 	@PostMapping("/login")
-	@ApiOperation(value= "로그인")
-	public Object login(@Valid @RequestBody LoginRequestDTO request,HttpServletResponse res) {
+	@ApiOperation(value = "로그인")
+	public Object login(@Valid @RequestBody LoginRequestDTO request, HttpServletResponse res) {
 		ResponseEntity<BasicResponse> response = null;
 		Map<String, Object> errors = new HashMap<>();
 		int check = userService.login(request);
-		if(check==1) {
+		if (check == 1) {
 			errors.put("field", "email");
 			errors.put("data", request.getEmail());
 			final ErrorResponse result = setErrors("E-4003", "존재하지 않는 이메일입니다.", errors);
-			
+
 			response = new ResponseEntity<BasicResponse>(result, HttpStatus.NOT_FOUND);
-		}else if(check==2) {
+		} else if (check == 2) {
 			errors.put("field", "password");
 			errors.put("data", request.getPassword());
 			final ErrorResponse result = setErrors("E-4004", "비밀번호가 일치하지 않습니다.", errors);
-			
+
 			response = new ResponseEntity<BasicResponse>(result, HttpStatus.CONFLICT);
-		}else {
+		} else {
 			final BasicResponse result = new BasicResponse();
 			User user = userService.selectByEmail(request.getEmail());
 			String nickname = user.getNickname();
 			res.setHeader("nickname", nickname);
-            result.status = "S-200";
-            result.message = "로그인에 성공했습니다.";
-            response = new ResponseEntity<BasicResponse>(result, HttpStatus.OK);
+			result.status = "S-200";
+			result.message = "로그인에 성공했습니다.";
+			response = new ResponseEntity<BasicResponse>(result, HttpStatus.OK);
 		}
 		return response;
 	}
-	
+
+	@GetMapping
+	@ApiOperation(value = "회원 정보 조회")
+	public Object select(@RequestParam String nickname) {
+		ResponseEntity<BasicResponse> response = null;
+		Map<String, Object> errors = new HashMap<>();
+		User user = userService.selectByNickname(nickname);
+		if (user == null) {
+			errors.put("field", "nickname");
+			errors.put("data", nickname);
+			final ErrorResponse result = setErrors("E-4005", "해당 유저가 존재하지 않습니다.", errors);
+			response = new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+		} else {
+			final BasicResponse result = new BasicResponse();
+			result.status = "S-200";
+			result.message = "회원 정보 조회에 성공했습니다.";
+			result.data = user;
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		}
+		return response;
+	}
+
+	@PutMapping
+	@ApiOperation(value = "회원 정보 수정")
+	public Object update(@Valid @RequestBody UpdateRequestDTO request,
+			@RequestHeader(value = "nickname", required = true) String nickname, HttpServletResponse res) {
+		ResponseEntity<BasicResponse> response = null;
+		Map<String, Object> errors = new HashMap<>();
+		User checkUser = userService.selectByNickname(nickname);
+		int check = userService.duplicateCheck("", request.getNickname());
+		if (!checkUser.getNickname().equals(request.getNickname()) && check == 2) {
+			errors.put("field", "nickname");
+			errors.put("data", request.getNickname());
+			final ErrorResponse result = setErrors("E-4002", "이미 존재하는 닉네임입니다.", errors);
+			response = new ResponseEntity<>(result, HttpStatus.CONFLICT);
+		} else {
+			final BasicResponse result = new BasicResponse();
+			User user = userService.update(request, nickname);
+			res.setHeader("nickname",user.getNickname());
+			result.status = "S-200";
+			result.message = "회원 정보 수정이 완료되었습니다.";
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		}
+		return response;
+	}
+
 	@DeleteMapping
 	@ApiOperation(value = "회원탈퇴")
 	public Object withDraw(@RequestParam String nickname) {
 		ResponseEntity<BasicResponse> response = null;
-        Map<String, Object> errors = new HashMap<>();
-        User user = userService.selectByNickname(nickname);
-        if (user == null) {
-            errors.put("field", "nickname");
-            errors.put("data", nickname);
-            final ErrorResponse result = setErrors("E-4005", "해당 유저가 존재하지 않습니다.", errors);
-            response = new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
-        } else {
-            userService.withdraw(nickname);
-            final BasicResponse result = new BasicResponse();
-            result.status = "S-200";
-            result.message = "회원 탈퇴에 성공했습니다.";
-            response = new ResponseEntity<>(result, HttpStatus.NO_CONTENT);
-        }
-        return response;
+		Map<String, Object> errors = new HashMap<>();
+		User user = userService.selectByNickname(nickname);
+		if (user == null) {
+			errors.put("field", "nickname");
+			errors.put("data", nickname);
+			final ErrorResponse result = setErrors("E-4005", "해당 유저가 존재하지 않습니다.", errors);
+			response = new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+		} else {
+			userService.withdraw(nickname);
+			final BasicResponse result = new BasicResponse();
+			result.status = "S-200";
+			result.message = "회원 탈퇴에 성공했습니다.";
+			response = new ResponseEntity<>(result, HttpStatus.NO_CONTENT);
+		}
+		return response;
 	}
-	
+
 	private ErrorResponse setErrors(String status, String message, Map<String, Object> errors) {
-        ErrorResponse res = new ErrorResponse();
-        res.status = status;
-        res.message = message;
-        res.errors = errors;
-        return res;
-    }
+		ErrorResponse res = new ErrorResponse();
+		res.status = status;
+		res.message = message;
+		res.errors = errors;
+		return res;
+	}
 }
