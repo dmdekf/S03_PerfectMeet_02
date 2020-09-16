@@ -1,10 +1,13 @@
 package com.POM.MatNam.user.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.POM.MatNam.user.dao.UserAuthDao;
 import com.POM.MatNam.user.dao.UserDao;
+import com.POM.MatNam.user.dto.LoginRequestDTO;
 import com.POM.MatNam.user.dto.SignupRequestDTO;
 import com.POM.MatNam.user.dto.User;
 import com.POM.MatNam.user.dto.UserAuth;
@@ -34,5 +37,22 @@ public class UserService {
 			return 2;
 		}
 		return 3;
+	}
+	
+	public int login(LoginRequestDTO request) {
+		Optional<User> userOpt = userDao.findByEmail(request.getEmail());
+		if(userOpt.isPresent()) {
+			User user = userOpt.get();
+			if(user.getPassword().equals(request.getPassword())) {
+				return 3;
+			}else {
+				return 2;
+			}
+		}else {
+			return 1;
+		}
+	}
+	public User selectByEmail(String email) {
+		return userDao.findByEmail(email).orElse(null);
 	}
 }

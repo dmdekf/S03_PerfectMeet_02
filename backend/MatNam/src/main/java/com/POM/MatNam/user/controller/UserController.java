@@ -3,6 +3,7 @@ package com.POM.MatNam.user.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
@@ -16,11 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.POM.MatNam.response.BasicResponse;
 import com.POM.MatNam.response.ErrorResponse;
+import com.POM.MatNam.user.dto.LoginRequestDTO;
 import com.POM.MatNam.user.dto.SignupRequestDTO;
 import com.POM.MatNam.user.dto.User;
 import com.POM.MatNam.user.service.UserService;
 
 import io.swagger.annotations.ApiOperation;
+import lombok.val;
 
 @RestController
 @RequestMapping("/user")
@@ -42,9 +45,9 @@ public class UserController {
 			
 			response = new ResponseEntity<BasicResponse>(result, HttpStatus.CONFLICT);
 		}else if(check==2) {
-			errors.put("field", "email");
-			errors.put("data", request.getEmail());
-			final ErrorResponse result = setErrors("E-4001", "이미 존재하는 이메일입니다.", errors);
+			errors.put("field", "nickname");
+			errors.put("data", request.getNickname());
+			final ErrorResponse result = setErrors("E-4002", "이미 존재하는 닉네임입니다.", errors);
 			
 			response = new ResponseEntity<BasicResponse>(result, HttpStatus.CONFLICT);
 		}else {
@@ -54,6 +57,36 @@ public class UserController {
 			result.message = "회원가입에 성공했습니다.";
 			response = new ResponseEntity<BasicResponse>(result, HttpStatus.CREATED);
 			
+		}
+		return response;
+	}
+	
+	@PostMapping("/login")
+	@ApiOperation(value= "로그인")
+	public Object login(@Valid @RequestBody LoginRequestDTO request,HttpServletResponse res) {
+		ResponseEntity<BasicResponse> response = null;
+		Map<String, Object> errors = new HashMap<>();
+		int check = userService.login(request);
+		if(check==1) {
+			errors.put("field", "email");
+			errors.put("data", request.getEmail());
+			final ErrorResponse result = setErrors("E-4003", "존재하지 않는 이메일입니다.", errors);
+			
+			response = new ResponseEntity<BasicResponse>(result, HttpStatus.NOT_FOUND);
+		}else if(check==2) {
+			errors.put("field", "password");
+			errors.put("data", request.getPassword());
+			final ErrorResponse result = setErrors("E-4004", "비밀번호가 일치하지 않습니다.", errors);
+			
+			response = new ResponseEntity<BasicResponse>(result, HttpStatus.CONFLICT);
+		}else {
+			final BasicResponse result = new BasicResponse();
+			User user = userService.selectByEmail(request.getEmail());
+			String nickname = user.getNickname();
+			res.setHeader("nickname", nickname);
+            result.status = "S-200";
+            result.message = "로그인에 성공했습니다.";
+            response = new ResponseEntity<BasicResponse>(result, HttpStatus.OK);
 		}
 		return response;
 	}
