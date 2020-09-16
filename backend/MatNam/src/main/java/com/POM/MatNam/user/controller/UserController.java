@@ -26,6 +26,7 @@ import com.POM.MatNam.user.dto.LoginRequestDTO;
 import com.POM.MatNam.user.dto.SignupRequestDTO;
 import com.POM.MatNam.user.dto.UpdateRequestDTO;
 import com.POM.MatNam.user.dto.User;
+import com.POM.MatNam.user.service.JwtService;
 import com.POM.MatNam.user.service.UserService;
 
 import io.swagger.annotations.ApiOperation;
@@ -36,6 +37,9 @@ import lombok.val;
 public class UserController {
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private JwtService jwtService;
 
 	@Transactional
 	@PostMapping
@@ -88,7 +92,9 @@ public class UserController {
 		} else {
 			final BasicResponse result = new BasicResponse();
 			User user = userService.selectByEmail(request.getEmail());
+			String token = jwtService.create(user);
 			String nickname = user.getNickname();
+			res.setHeader("jwt-auth-token", token);
 			res.setHeader("nickname", nickname);
 			result.status = "S-200";
 			result.message = "로그인에 성공했습니다.";
@@ -134,6 +140,8 @@ public class UserController {
 		} else {
 			final BasicResponse result = new BasicResponse();
 			User user = userService.update(request, nickname);
+			String token = jwtService.create(user);
+			res.setHeader("jwt-auth-token", token);
 			res.setHeader("nickname",user.getNickname());
 			result.status = "S-200";
 			result.message = "회원 정보 수정이 완료되었습니다.";
