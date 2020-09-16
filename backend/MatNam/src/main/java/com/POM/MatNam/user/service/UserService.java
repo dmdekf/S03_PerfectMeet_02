@@ -52,7 +52,14 @@ public class UserService {
 			return 1;
 		}
 	}
+	public void withdraw(String nickname) {
+		User user = userDao.findByNickname(nickname).get();
+		userDao.deleteById(user.getId());
+	}
 	public User selectByEmail(String email) {
 		return userDao.findByEmail(email).orElse(null);
+	}
+	public User selectByNickname(String nickname) {
+		return userDao.findByNickname(nickname).orElse(null);
 	}
 }

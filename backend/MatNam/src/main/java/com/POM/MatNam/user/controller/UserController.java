@@ -10,9 +10,11 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.POM.MatNam.response.BasicResponse;
@@ -32,7 +34,7 @@ public class UserController {
 	private UserService userService;
 	
 	@Transactional
-	@PostMapping("/signup")
+	@PostMapping
 	@ApiOperation(value = "회원 가입")
 	public Object signup(@Valid @RequestBody SignupRequestDTO request) {
 		ResponseEntity<BasicResponse> response = null;
@@ -89,6 +91,27 @@ public class UserController {
             response = new ResponseEntity<BasicResponse>(result, HttpStatus.OK);
 		}
 		return response;
+	}
+	
+	@DeleteMapping
+	@ApiOperation(value = "회원탈퇴")
+	public Object withDraw(@RequestParam String nickname) {
+		ResponseEntity<BasicResponse> response = null;
+        Map<String, Object> errors = new HashMap<>();
+        User user = userService.selectByNickname(nickname);
+        if (user == null) {
+            errors.put("field", "nickname");
+            errors.put("data", nickname);
+            final ErrorResponse result = setErrors("E-4005", "해당 유저가 존재하지 않습니다.", errors);
+            response = new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        } else {
+            userService.withdraw(nickname);
+            final BasicResponse result = new BasicResponse();
+            result.status = "S-200";
+            result.message = "회원 탈퇴에 성공했습니다.";
+            response = new ResponseEntity<>(result, HttpStatus.NO_CONTENT);
+        }
+        return response;
 	}
 	
 	private ErrorResponse setErrors(String status, String message, Map<String, Object> errors) {
