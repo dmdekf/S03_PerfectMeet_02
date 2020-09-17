@@ -17,47 +17,50 @@ import com.POM.MatNam.user.dto.UserAuth;
 public class UserService {
 	@Autowired
 	private UserDao userDao;
-	
+
 	@Autowired
 	private UserAuthDao authDao;
-	
-	public User signup(SignupRequestDTO request) {
-		User user = new User();
+
+	public UserAuth signup(SignupRequestDTO request, String key) {
+		UserAuth user = new UserAuth();
 		user.setEmail(request.getEmail());
 		user.setNickname(request.getNickname());
 		user.setPassword(request.getPassword());
 		user.setAge(request.getAge());
 		user.setGender(request.isGender());
-		return userDao.save(user);
+		user.setToken(key);
+		return authDao.save(user);
 	}
-	
-	public int duplicateCheck(String email,String nickname) {
-		if(userDao.findByEmail(email).isPresent()) {
+
+	public int duplicateCheck(String email, String nickname) {
+		if (userDao.findByEmail(email).isPresent() || authDao.findByEmail(email).isPresent()) {
 			return 1;
-		}else if(userDao.findByNickname(nickname).isPresent()) {
+		} else if (userDao.findByNickname(nickname).isPresent() || authDao.findByNickname(nickname).isPresent()) {
 			return 2;
 		}
 		return 3;
 	}
-	
+
 	public int login(LoginRequestDTO request) {
 		Optional<User> userOpt = userDao.findByEmail(request.getEmail());
-		if(userOpt.isPresent()) {
+		if (userOpt.isPresent()) {
 			User user = userOpt.get();
-			if(user.getPassword().equals(request.getPassword())) {
+			if (user.getPassword().equals(request.getPassword())) {
 				return 3;
-			}else {
+			} else {
 				return 2;
 			}
-		}else {
+		} else {
 			return 1;
 		}
 	}
+
 	public void withdraw(String nickname) {
 		User user = userDao.findByNickname(nickname).get();
 		userDao.deleteById(user.getId());
 	}
-	public User update(UpdateRequestDTO request,String nickname) {
+
+	public User update(UpdateRequestDTO request, String nickname) {
 		User user = new User();
 		User temp = selectByNickname(nickname);
 		user.setEmail(temp.getEmail());
@@ -70,10 +73,30 @@ public class UserService {
 		user = userDao.save(user);
 		return user;
 	}
+
 	public User selectByEmail(String email) {
 		return userDao.findByEmail(email).orElse(null);
 	}
+
 	public User selectByNickname(String nickname) {
 		return userDao.findByNickname(nickname).orElse(null);
+	}
+
+	public User authentication(long id, String key) {
+		Optional<UserAuth> ua = authDao.findByIdAndToken(id, key);
+		if(ua.isPresent()) {
+			UserAuth auth = ua.get();
+			User user = new User();
+			user.setEmail(auth.getEmail());
+			user.setNickname(auth.getNickname());
+			user.setPassword(auth.getPassword());
+			user.setAge(auth.getAge());
+			user.setGender(auth.isGender());
+			authDao.delete(auth);
+			user = userDao.save(user);
+			return user;
+		}else {
+			return null;
+		}
 	}
 }

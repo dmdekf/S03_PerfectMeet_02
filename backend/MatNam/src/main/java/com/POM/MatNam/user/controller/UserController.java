@@ -3,6 +3,7 @@ package com.POM.MatNam.user.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -26,7 +27,9 @@ import com.POM.MatNam.user.dto.LoginRequestDTO;
 import com.POM.MatNam.user.dto.SignupRequestDTO;
 import com.POM.MatNam.user.dto.UpdateRequestDTO;
 import com.POM.MatNam.user.dto.User;
+import com.POM.MatNam.user.dto.UserAuth;
 import com.POM.MatNam.user.service.JwtService;
+import com.POM.MatNam.user.service.MailSendService;
 import com.POM.MatNam.user.service.UserService;
 
 import io.swagger.annotations.ApiOperation;
@@ -40,6 +43,9 @@ public class UserController {
 	
 	@Autowired
 	private JwtService jwtService;
+	
+	@Autowired
+	private MailSendService mailSendService;
 
 	@Transactional
 	@PostMapping
@@ -61,7 +67,19 @@ public class UserController {
 
 			response = new ResponseEntity<BasicResponse>(result, HttpStatus.CONFLICT);
 		} else {
-			User user = userService.signup(request);
+			String key = mailSendService.getKey(false, 20);
+			
+			try {
+				UserAuth user = userService.signup(request,key);
+				mailSendService.mailSendWithUserKey(user.getEmail(), user.getNickname(), key, user.getId());
+				
+			}catch(MessagingException e) {
+				errors.put("field", "sendMail");
+
+                final ErrorResponse result = setErrors("E-4006", "메일 발송에 실패했습니다.", errors);
+
+                return new ResponseEntity<>(result, HttpStatus.CONFLICT);
+			}
 			final BasicResponse result = new BasicResponse();
 			result.status = "S-200";
 			result.message = "회원가입에 성공했습니다.";
@@ -169,6 +187,26 @@ public class UserController {
 			response = new ResponseEntity<>(result, HttpStatus.NO_CONTENT);
 		}
 		return response;
+	}
+	
+	@GetMapping("/auth")
+	@ApiOperation(value="이메일 인증")
+	public Object confirm(@RequestParam long id, @RequestParam String key) {
+		 ResponseEntity<BasicResponse> response = null;
+	        Map<String, Object> errors = new HashMap<>();
+	        User user = userService.authentication(id, key);
+	        if (user == null) {
+	            errors.put("field", "key");
+	            errors.put("data", key);
+	            final ErrorResponse result = setErrors("E-4007", "이메일 인증에 실패했습니다.", errors);
+	            response = new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+	        } else {
+	            final BasicResponse result = new BasicResponse();
+	            result.status = "S-200";
+	            result.message = "이메일 인증에 성공했습니다.";
+	            response = new ResponseEntity<>(result, HttpStatus.OK);
+	        }
+	        return response;
 	}
 
 	private ErrorResponse setErrors(String status, String message, Map<String, Object> errors) {

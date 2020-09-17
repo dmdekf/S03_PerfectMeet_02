@@ -35,5 +35,5 @@ public class UserAuth {
 	private boolean gender;
 	
 	@Column
-	private String key;
+	private String token;
 }
