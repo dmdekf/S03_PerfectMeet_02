@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.POM.MatNam.user.dao.UserAuthDao;
 import com.POM.MatNam.user.dao.UserDao;
@@ -12,20 +13,26 @@ import com.POM.MatNam.user.dto.SignupRequestDTO;
 import com.POM.MatNam.user.dto.UpdateRequestDTO;
 import com.POM.MatNam.user.dto.User;
 import com.POM.MatNam.user.dto.UserAuth;
+import com.POM.MatNam.user.util.EncryptHelper;
 
 @Service
+@Transactional
 public class UserService {
 	@Autowired
 	private UserDao userDao;
 
 	@Autowired
 	private UserAuthDao authDao;
+	
+	@Autowired
+	private EncryptHelper encryptHelper;
 
 	public UserAuth signup(SignupRequestDTO request, String key) {
 		UserAuth user = new UserAuth();
 		user.setEmail(request.getEmail());
 		user.setNickname(request.getNickname());
-		user.setPassword(request.getPassword());
+		String encrypted = encryptHelper.encrypt(request.getPassword());
+		user.setPassword(encrypted);
 		user.setAge(request.getAge());
 		user.setGender(request.isGender());
 		user.setToken(key);
@@ -45,7 +52,7 @@ public class UserService {
 		Optional<User> userOpt = userDao.findByEmail(request.getEmail());
 		if (userOpt.isPresent()) {
 			User user = userOpt.get();
-			if (user.getPassword().equals(request.getPassword())) {
+			if (encryptHelper.isMatch(request.getPassword(), user.getPassword())) {
 				return 3;
 			} else {
 				return 2;
@@ -66,7 +73,8 @@ public class UserService {
 		user.setEmail(temp.getEmail());
 		user.setId(temp.getId());
 		user.setNickname(request.getNickname());
-		user.setPassword(request.getPassword());
+		String encrypted = encryptHelper.encrypt(request.getPassword());
+		user.setPassword(encrypted);
 		user.setProfileImg(request.getProfileImg());
 		user.setAge(temp.getAge());
 		user.setGender(temp.isGender());
