@@ -72,7 +72,7 @@
 
 * Github: [@dmdekf](https://github.com/dmdekf)
 
-👨 **Sung Hyeon Lee **
+👨 **Sung Hyeon Lee**
 
 * Github: [@lshmn951](https://lab.ssafy.com/lshmn951)
 
