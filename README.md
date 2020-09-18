@@ -15,6 +15,7 @@
     <img alt="CSS3" src="https://img.shields.io/badge/CSS3-1572B6?logo=CSS3&logoColor=white" />
     <img alt="HTML5" src="https://img.shields.io/badge/html5-E34F26?logo=HTML5&logoColor=white" />
     <img alt="Spring" src="https://img.shields.io/badge/Spring-6DB33F?logo=Spring&logoColor=white" />
+    <img alt="Python" src="https://img.shields.io/badge/Python-3776AB?logo=Python&logoColor=white" />
 </p>
 <p>
 <div>Env</div>
@@ -56,7 +57,7 @@
 ## 기술 스택
 
 - Front-end: Vue.cli, node.js, Vuetify, Vuex, bootstrap
-- Back-end: Spring
+- Back-end: Python,Spring
 - Env & etc: AWS-EC2, labssafy, Jira, Jenkins
 - API를 이용하여 서버 구동
 - Oauth2.0을 이용한 소셜 로그인
