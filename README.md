@@ -75,7 +75,7 @@
 
 👨 **Sung Hyeon Lee**
 
-* Github: [@lshmn951](https://lab.ssafy.com/lshmn951)
+* Github: [@lshmn951](https://github.com/lshmn951)
 
 👨 **Hyung jin Jeon**
 
