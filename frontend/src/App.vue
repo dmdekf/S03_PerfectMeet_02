@@ -32,7 +32,7 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>완벽한 맛남</v-toolbar-title>
     </v-app-bar>
-    <v-main>
+    <v-main class="pa-0">
       <v-container
         class="fill-height"
         fluid
@@ -49,6 +49,7 @@
       </v-container>
     </v-main>
     <router-view class="container mx-10px"/>
+    
     <v-footer
       id="footer"
       class="pa-0"
@@ -65,6 +66,10 @@
       </div>
       </v-col>
     </v-footer>
+    
+    <div class = "blank">
+    </div>
+
   </v-app>
 </template>
 
@@ -74,12 +79,15 @@
       source: String,
     },
     data: () => ({
-      drawer: null,
+      drawer: false,
     }),
   }
 </script>
 
 <style>
+.blank{
+  height: 50px;
+}
 #footer {
   opacity: 80%;
 }

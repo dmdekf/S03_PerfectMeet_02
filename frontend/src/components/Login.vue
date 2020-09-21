@@ -1,4 +1,5 @@
 <template>
+
 <div id="app">
     <v-app>
         <v-dialog v-model="dialog" persistent max-width="600px" min-width="360px">
