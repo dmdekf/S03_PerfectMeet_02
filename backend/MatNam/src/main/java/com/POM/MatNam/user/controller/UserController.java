@@ -1,6 +1,7 @@
 package com.POM.MatNam.user.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.mail.MessagingException;
@@ -23,6 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.POM.MatNam.response.BasicResponse;
 import com.POM.MatNam.response.ErrorResponse;
+import com.POM.MatNam.review.DAO.ReviewDao;
+import com.POM.MatNam.review.DTO.Review;
 import com.POM.MatNam.user.dto.LoginRequestDTO;
 import com.POM.MatNam.user.dto.SignupRequestDTO;
 import com.POM.MatNam.user.dto.UpdateRequestDTO;
@@ -47,7 +50,9 @@ public class UserController {
 	@Autowired
 	private MailSendService mailSendService;
 
-	@Transactional
+	@Autowired
+	private ReviewDao reviewDao;
+	
 	@PostMapping
 	@ApiOperation(value = "회원 가입")
 	public Object signup(@Valid @RequestBody SignupRequestDTO request) {
@@ -134,9 +139,13 @@ public class UserController {
 			response = new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
 		} else {
 			final BasicResponse result = new BasicResponse();
+			Map<String, Object> data = new HashMap<>();
+			List<Review> reviews = reviewDao.findByNickname(nickname);
 			result.status = "S-200";
 			result.message = "회원 정보 조회에 성공했습니다.";
-			result.data = user;
+			data.put("user", user);
+			data.put("reivews",reviews);
+			result.data = data;
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		}
 		return response;
