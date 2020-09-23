@@ -19,19 +19,19 @@
             관심있는 식당 목록
         </v-list-item-icon>
         <v-divider></v-divider>
-            <v-list-item v-for="(post, idx) in posts" 
+            <v-list-item v-for="(list, idx) in likes" 
                 
-                @click="showDetail(post.id)"
+                @click="showDetail(list.id)"
                 :key="idx">
             <v-list-item-content>
-                <v-list-item-title class="mb-2">#{{idx+1}}. {{post.subject}}</v-list-item-title>
-                <v-list-item-subtitle>{{ moment(post.created).locale('ko-kr').format("LLLL")}}</v-list-item-subtitle>
+                <v-list-item-title class="mb-2">#{{idx+1}}. {{list.subject}}</v-list-item-title>
+                <v-list-item-subtitle>{{ moment(list.created).locale('ko-kr').format("LLLL")}}</v-list-item-subtitle>
             </v-list-item-content>
             <v-list-item-icon >
-                <v-icon color="#DC143C" small>mdi-heart</v-icon>: {{post.lnt}}  
+                <v-icon color="#DC143C" small>mdi-heart</v-icon>: {{list.lnt}}  
             </v-list-item-icon>
             <v-list-item-icon>
-                <v-icon color="black" small>mdi-comment-multiple-outline</v-icon><span>: {{post.cnt}}  </span>
+                <v-icon color="black" small>mdi-comment-multiple-outline</v-icon><span>: {{list.cnt}}  </span>
             </v-list-item-icon>            
             </v-list-item>  
             <v-divider
@@ -45,10 +45,10 @@
 </div>
 </template>
 
-<script>
-import Vue from "vue";
+// <script>
+// import Vue from "vue";
 import axios from "axios";
-import router from "@/router";
+// import router from "@/router";
 import SERVER from "@/api/api";
 export default {
     name:"Profile",
@@ -61,7 +61,6 @@ export default {
     data:() => {
         return {
             posts:[],
-            searchData: { selected: "user",word :""},
             randomImage:""
         }
     },

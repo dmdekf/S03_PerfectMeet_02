@@ -5,7 +5,8 @@ import BootstrapVue from 'bootstrap-vue'
 import Main from "../components/Main.vue"
 import selectMap from "../components/SelectMap.vue"
 
-import Login from "../components/Login.vue"
+import Login from "../components/user/Login.vue"
+import Profile from "../components/user/Profile.vue"
 
 Vue.use(BootstrapVue)
 Vue.use(Vuex)
@@ -13,14 +14,19 @@ Vue.use(VueRouter)
 
 const routes = [
   {
+    path: "/",
+    name: "MAIN",
+    component: Main,
+  },
+  {
     path:'/user/login',
     name: 'userLogin',
     component: Login,
   },
   {
-    path: "/",
-    name: "MAIN",
-    component: Main,
+    path: '/user/profile',
+    name: 'userProfile',
+    component: Profile,
   },
   {
     path:"/user/selectMap",
