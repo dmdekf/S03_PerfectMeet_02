@@ -13,10 +13,17 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     token: "",
-    user_email: "",
+    email: "",
     status: "",
+    nickname:"",
     login_user: "",
-    auth_token:"",    
+    auth_token: "",
+    select_map: "",
+    select_userinfo: {
+      gender: "",
+      age:""
+    },
+    select_userpurpose:"",
   },
   getters: {
     info: state => ({
@@ -33,14 +40,14 @@ export default new Vuex.Store({
     SET_TOKEN(state, { token }) {
       state.token = token
     },
-    SET_EMAIL(state, { user_email }) {
-      state.user_email = user_email
+    SET_EMAIL(state, { email }) {
+      state.email = email
     },
     SET_STATUS(state, { status }) {
       state.status = status
     },
-    SET_USER(state, { login_user }) {
-      state.login_user = login_user
+    SET_NICKNAME(state, { nickname }) {
+      state.nickname = nickname 
     },
   },
   actions: {
@@ -60,7 +67,7 @@ export default new Vuex.Store({
         data: {
           email: signupData.email,
           password: signupData.password,
-          nickname: signupData.nickName,
+          nickname: signupData.nickname,
         },
       })
         .then((res) => {
@@ -87,7 +94,7 @@ export default new Vuex.Store({
 			.then((res) => {
 					if (res.data.status) {
 					commit('SET_TOKEN', { token: res.headers["jwt-auth-token"] })
-					commit('SET_EMAIL', { user_email: res.data.data.email })
+					commit('SET_EMAIL', { email: res.data.data.email })
 					commit('SET_USER', { login_user: res.data.data.uid })
 					commit('SET_STATUS', { status: res.data.status })
 					getters.config
@@ -114,7 +121,7 @@ export default new Vuex.Store({
         .then((res) => {
           if (res.data.status) {
             commit('SET_TOKEN', { token: res.headers["jwt-auth-token"] })
-            commit('SET_EMAIL', { user_email: res.data.data.email })
+            commit('SET_EMAIL', { email: res.data.data.email })
             commit('SET_USER', { login_user: res.data.data.uid })
             commit('SET_STATUS', { status: res.data.status })
             
@@ -137,7 +144,7 @@ export default new Vuex.Store({
     },
     logout({ commit, state }) {
       commit('SET_TOKEN', { token: "" })
-      commit('SET_EMAIL', { user_email: "" })
+      commit('SET_EMAIL', { email: "" })
       commit('SET_USER', { login_user: "" })
       commit('SET_STATUS', { status: "" })
       if (state.auth_token) {

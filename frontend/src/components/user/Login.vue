@@ -16,10 +16,10 @@
                                 <v-form ref="loginForm" v-model="valid" lazy-validation>
                                     <v-row max-width="500px">
                                         <v-col cols="12">
-                                            <v-text-field v-model="loginEmail" :rules="loginEmailRules" label="E-mail" required></v-text-field>
+                                            <v-text-field v-model="loginData.loginEmail" :rules="loginEmailRules" label="E-mail" required></v-text-field>
                                         </v-col>
                                         <v-col cols="12">
-                                            <v-text-field v-model="loginPassword" :append-icon="show1?'eye':'eye-off'" :rules="[rules.required, rules.min]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="Password" hint="At least 8 characters" counter @click:append="show1 = !show1"></v-text-field>
+                                            <v-text-field v-model="loginData.loginPassword" :append-icon="show1?'eye':'eye-off'" :rules="[rules.required, rules.min]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="Password" hint="At least 8 characters" counter @click:append="show1 = !show1"></v-text-field>
                                         </v-col>
                                         <v-col class="d-flex" cols="12" sm="6" xsm="12">
                                         </v-col>
@@ -28,7 +28,7 @@
 																<v-card-actions>
 																	<v-spacer></v-spacer>
 																	<v-btn color="red"  @click="!dialog" to="/">Close</v-btn>
-																	<v-btn :disabled="!valid" color="success" @click="validate"> Login </v-btn>
+																	<v-btn :disabled="!valid" color="success" @click="loginvalidate(loginData)"> Login </v-btn>
 																</v-card-actions>
                             </v-card-text>
                         </v-card>
@@ -39,16 +39,16 @@
                                 <v-form ref="registerForm" v-model="valid" lazy-validation>
                                     <v-row>
                                         <v-col cols="12">
-                                            <v-text-field v-model="email" :rules="emailRules" label="E-mail" required></v-text-field>
+                                            <v-text-field v-model="signup.email" :rules="signupEmailRules" label="E-mail" required></v-text-field>
                                         </v-col>
                                         <v-col cols="12" sm="6" md="6">
-                                            <v-text-field v-model="NickName" :rules="[rules.required]" label="Nick Name" maxlength="20" required></v-text-field>
+                                            <v-text-field v-model="signup.NickName" :rules="[rules.required]" label="Nick Name" maxlength="20" required></v-text-field>
                                         </v-col>
                                         <v-col cols="12">
-                                            <v-text-field v-model="password" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="Password" hint="At least 8 characters" counter @click:append="show1 = !show1"></v-text-field>
+                                            <v-text-field v-model="signup.password" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="Password" hint="At least 8 characters" counter @click:append="show1 = !show1"></v-text-field>
                                         </v-col>
                                         <v-col cols="12">
-                                            <v-text-field block v-model="verify" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, passwordMatch]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="Confirm Password" counter @click:append="show1 = !show1"></v-text-field>
+                                            <v-text-field block v-model="signup.verify" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, passwordMatch]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="Confirm Password" counter @click:append="show1 = !show1"></v-text-field>
                                         </v-col>
 																				<v-col cols="12" align="center" justify="center">
                                         <input
@@ -73,7 +73,7 @@
 																<v-card-actions>
 																	<v-spacer></v-spacer>
 																	<v-btn color="red"  @click="!dialog" to="/">Close</v-btn>
-																	<v-btn :disabled="!valid" color="success" @click="validate">Register</v-btn>
+																	<v-btn :disabled="!valid" color="success" @click="signupalidate(signupData)">Register</v-btn>
 																</v-card-actions>
                             </v-card-text>
                         </v-card>
@@ -85,6 +85,7 @@
 </div>
 </template>
 <script>
+import { mapActions } from 'vuex'
 export default {
   el: '#app',
   computed: {
@@ -93,10 +94,17 @@ export default {
     }
   },
   methods: {
-    validate() {
+    ...mapActions(['login','signup']),
+    loginvalidate(loginData) {
       if (this.$refs.loginForm.validate()) {
-        // submit form to server/API here...
+        this.login(loginData)
       }
+      else {
+        alert("잘못된 접근입니다.")
+      }
+    },
+    signupvalidate(signupData) {
+      this.signup(signupData)
     },
     reset() {
       this.$refs.form.reset();
@@ -113,17 +121,21 @@ export default {
         {name:"Register", icon:"mdi-account-outline"}
     ],
     valid: true,
-    NickName: "",
-    email: "",
-    password: "",
+    signupData:{
+      NickName: "",
+      email: "",
+      password: ""
+    },
     verify: "",
-    loginPassword: "",
-    loginEmail: "",
+    loginData:{
+      loginPassword: "",
+      loginEmail: ""
+    },
     loginEmailRules: [
       v => !!v || "Required",
       v => /.+@.+\..+/.test(v) || "E-mail must be valid"
     ],
-    emailRules: [
+    signupEmailRules: [
       v => !!v || "Required",
       v => /.+@.+\..+/.test(v) || "E-mail must be valid"
     ],
