@@ -6,6 +6,12 @@
     <v-container>
     <v-row>
         <v-col cos="12">
+            Profile Page
+        <v-if>
+            <div class="my-2">
+                <v-btn color="primary">정보 수정하기</v-btn>
+            </div>
+        </v-if>
         <v-img src="https://picsum.photos/400/500" >
         <v-row class="fill-height">
           <v-card-title class="text_border white--text pl-12 pt-15 text-right ma-5">
