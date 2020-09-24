@@ -8,5 +8,5 @@ import com.POM.MatNam.user.dto.User;
 
 public interface UserDao extends JpaRepository<User, Long>{
 	Optional<User> findByEmail(String email);
-	Optional<User> findByNickname(String email);
+	Optional<User> findByNickname(String nickname);
 }
