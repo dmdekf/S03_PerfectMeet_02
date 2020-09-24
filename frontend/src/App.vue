@@ -42,8 +42,8 @@
           <v-btn class="ma-2" outlined color="white" to="/user/logout" >
             로그아웃
           </v-btn>
-          <v-btn class="ma-2" outlined color="white" v-on:click="moveDetail">
-            회원정보
+          <v-btn class="ma-2" outlined color="white" to="/user/profile">
+            프로필
           </v-btn>
           </div>
           <div v-if="!isLoggedIn">        
