@@ -5,7 +5,7 @@
       app
     >
       <v-list dense>
-        <v-list-item link>
+        <v-list-item link @click="$router.push('/')">>
           <v-list-item-action>
             <v-icon>mdi-home</v-icon>
           </v-list-item-action>
@@ -13,12 +13,20 @@
             <v-list-item-title>Home</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link>
+        <v-list-item link @click="$router.push('/user/selectMap')" >
           <v-list-item-action>
-            <v-icon>mdi-email</v-icon>
+            <v-icon>mdi-food</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>Contact</v-list-item-title>
+            <v-list-item-title>restruant</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+         <v-list-item link @click="$router.push('/post/notice')">
+          <v-list-item-action>
+            <v-icon>mdi-star</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Notice</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -99,6 +107,7 @@ export default {
   },
   data: () => ({
     drawer: false,
+    
   }),
 }
 </script>
