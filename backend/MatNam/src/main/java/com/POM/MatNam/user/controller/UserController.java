@@ -1,6 +1,7 @@
 package com.POM.MatNam.user.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.mail.MessagingException;
@@ -23,6 +24,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.POM.MatNam.response.BasicResponse;
 import com.POM.MatNam.response.ErrorResponse;
+import com.POM.MatNam.review.DAO.ReviewDao;
+import com.POM.MatNam.review.DTO.Review;
+import com.POM.MatNam.user.dto.FindpwRequestDTO;
 import com.POM.MatNam.user.dto.LoginRequestDTO;
 import com.POM.MatNam.user.dto.SignupRequestDTO;
 import com.POM.MatNam.user.dto.UpdateRequestDTO;
@@ -47,7 +51,9 @@ public class UserController {
 	@Autowired
 	private MailSendService mailSendService;
 
-	@Transactional
+	@Autowired
+	private ReviewDao reviewDao;
+	
 	@PostMapping
 	@ApiOperation(value = "회원 가입")
 	public Object signup(@Valid @RequestBody SignupRequestDTO request) {
@@ -134,9 +140,13 @@ public class UserController {
 			response = new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
 		} else {
 			final BasicResponse result = new BasicResponse();
+			Map<String, Object> data = new HashMap<>();
+			List<Review> reviews = reviewDao.findByNickname(nickname);
 			result.status = "S-200";
 			result.message = "회원 정보 조회에 성공했습니다.";
-			result.data = user;
+			data.put("user", user);
+			data.put("reivews",reviews);
+			result.data = data;
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		}
 		return response;
@@ -208,6 +218,39 @@ public class UserController {
 	        }
 	        return response;
 	}
+	
+	@PostMapping("/user/findpw")
+    @ApiOperation(value = "비밀 번호 찾기")
+    public Object findpw(@RequestBody FindpwRequestDTO request) {
+        ResponseEntity<BasicResponse> response = null;
+        Map<String, Object> errors = new HashMap<>();
+        String pw = userService.findPw(request.getEmail(), request.getNickname());
+        if (pw.equals("email")) {
+        	errors.put("field", "email");
+            errors.put("data", request.getEmail());
+            final ErrorResponse result = setErrors("E-4003", "존재하지 않는 이메일 입니다.", errors);
+            response = new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        } else if (pw.equals("nickname")) {
+            errors.put("field", "nickname");
+            errors.put("data", request.getNickname());
+            final ErrorResponse result = setErrors("E-4008", "닉네임이 일치하지 않습니다.", errors);
+            response = new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+        } else {
+            try {
+                mailSendService.mailSendWithPassword(request.getEmail(), request.getNickname(), pw);
+            } catch (MessagingException e) {
+                errors.put("field", "sendMail");
+                final ErrorResponse result = setErrors("E-4006", "메일 발송에 실패했습니다.", errors);
+                return new ResponseEntity<>(result, HttpStatus.CONFLICT);
+            }
+            final BasicResponse result = new BasicResponse();
+            result.status = "S-200";
+            result.message = "비밀번호 찾기에 성공했습니다.";
+            response = new ResponseEntity<>(result, HttpStatus.OK);
+        }
+
+        return response;
+    }
 
 	private ErrorResponse setErrors(String status, String message, Map<String, Object> errors) {
 		ErrorResponse res = new ErrorResponse();
