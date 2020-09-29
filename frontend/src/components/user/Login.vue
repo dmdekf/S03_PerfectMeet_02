@@ -39,41 +39,40 @@
                                 <v-form ref="registerForm" v-model="valid" lazy-validation>
                                     <v-row>
                                         <v-col cols="12">
-                                            <v-text-field v-model="signup.email" :rules="signupEmailRules" label="E-mail" required></v-text-field>
+                                            <v-text-field v-model="signupData.email" :rules="signupEmailRules" label="E-mail" required></v-text-field>
                                         </v-col>
                                         <v-col cols="12" sm="6" md="6">
-                                            <v-text-field v-model="signup.NickName" :rules="[rules.required]" label="Nick Name" maxlength="20" required></v-text-field>
+                                            <v-text-field v-model="signupData.nickname" :rules="[rules.required]" label="Nick Name" maxlength="20" required></v-text-field>
                                         </v-col>
                                         <v-col cols="12">
-                                            <v-text-field v-model="signup.password" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="Password" hint="At least 8 characters" counter @click:append="show1 = !show1"></v-text-field>
+                                            <v-text-field v-model="signupData.password" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="Password" hint="At least 8 characters" counter @click:append="show1 = !show1"></v-text-field>
                                         </v-col>
                                         <v-col cols="12">
-                                            <v-text-field block v-model="signup.verify" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, passwordMatch]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="Confirm Password" counter @click:append="show1 = !show1"></v-text-field>
+                                            <v-text-field block v-model="signupData.verify" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, passwordMatch]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="Confirm Password" counter @click:append="show1 = !show1"></v-text-field>
                                         </v-col>
 																				<v-col cols="12" align="center" justify="center">
                                         <input
 																					id = "file-selector"
 																					ref="file"
 																					type="file"
-																					@change="handleFileUpload()"
 																					/>
-																					<v-btn @click="uploadFile" color="primary">프로필 사진 업로드</v-btn>
+																					<v-btn  color="primary">프로필 사진 업로드</v-btn>
 																				</v-col>
 																			
-																					<v-container fluid :v-show="profileUrl" max-height="400">
+																					<!-- <v-container fluid :v-show="profileUrl" max-height="400"> -->
 																					<v-row justify="center" align="center" max-height="400">
 																					<v-col cols="8" aspect-ratio="2" contain  align="center" justify="center" max-height="400">
-																					<v-img  v-if="profileUrl" :src="url" aspect-ratio="2" max-width="200" max-height="400">
-																					</v-img>
+																					<!-- <v-img  v-if="profileUrl" :src="url" aspect-ratio="2" max-width="200" max-height="400"> -->
+																					<!-- </v-img> -->
 																					</v-col>
 																					</v-row>
-																					</v-container>
+																					<!-- </v-container> -->
                                     </v-row>
                                 </v-form>
 																<v-card-actions>
 																	<v-spacer></v-spacer>
 																	<v-btn color="red"  @click="!dialog" to="/">Close</v-btn>
-																	<v-btn :disabled="!valid" color="success" @click="signupalidate(signupData)">Register</v-btn>
+																	<v-btn :disabled="!valid" color="success" @click="signupvalidate(signupData)">Register</v-btn>
 																</v-card-actions>
                             </v-card-text>
                         </v-card>
@@ -85,12 +84,13 @@
 </div>
 </template>
 <script>
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
   el: '#app',
   computed: {
+    ...mapState,
     passwordMatch() {
-      return () => this.password === this.verify || "Password must match";
+      return () => this.signupData.password === this.signupData.verify || "Password must match";
     }
   },
   methods: {
@@ -104,6 +104,7 @@ export default {
       }
     },
     signupvalidate(signupData) {
+      console.log(signupData)
       this.signup(signupData)
     },
     reset() {
@@ -122,9 +123,10 @@ export default {
     ],
     valid: true,
     signupData:{
-      NickName: "",
+      nickname: "",
       email: "",
-      password: ""
+      password: "",
+      verify:""
     },
     verify: "",
     loginData:{

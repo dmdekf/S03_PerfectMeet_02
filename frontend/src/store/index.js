@@ -8,7 +8,7 @@ import router from "@/router";
 // import createPersistedState from 'vuex-persistedstate';
 const storagesession = window.sessionStorage;
 const storagelocal = window.localStorage;
-const SERVER = "http://localhost:8080"
+import SERVER from "@/api/api";
 Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
@@ -63,49 +63,41 @@ export default new Vuex.Store({
     signup({ commit }, signupData) {
       axios({
         method: "post",
-        url: SERVER.URL + "/account/signup",
+        url: SERVER.URL + "/user",
         data: {
           email: signupData.email,
           password: signupData.password,
           nickname: signupData.nickname,
         },
       })
-        .then((res) => {
-          if (res.data.status) {
-            this.$router.push("/user/signup");
-          }
-        })
         .then(res => {
           if (res.data.status) {
             commit('SET_TOKEN', res.data.key)
-            this.$router.push("/user/signup");
+            this.$router.push("/");
           }
         })
         .catch(err => console.log(err.response.data))
     },
     login({ commit, getters }, loginData) {
       axios({
-				method: 'post',
-				url: SERVER.URL + "/user/signin",
-				data: {
-				email: loginData.email, password: loginData.password
-				}
-			})
-			.then((res) => {
-					if (res.data.status) {
-					commit('SET_TOKEN', { token: res.headers["jwt-auth-token"] })
-					commit('SET_EMAIL', { email: res.data.data.email })
-					commit('SET_USER', { login_user: res.data.data.uid })
-					commit('SET_STATUS', { status: res.data.status })
-					getters.config
-					router.push({ name: "MAIN" })            
-					} else {
-					this.dispatch("showAlert",2)
-					}
-			})
+        method: 'post',
+        url: SERVER.URL + "/user/signin",
+        data: {
+          email: loginData.email, password: loginData.password
+        }
+      })
+        .then((res) => {
+          if (res.data.status) {
+            commit('SET_TOKEN', { token: res.headers["jwt-auth-token"] })
+            commit('SET_EMAIL', { email: res.data.data.email })
+            commit('SET_USER', { login_user: res.data.data.uid })
+            commit('SET_STATUS', { status: res.data.status })
+            getters.config
+            router.push({ name: "MAIN" })
+          }
+        })
 			.catch(e => {
 					console.log(e.response.data)
-					this.dispatch("showAlert",2)
 			});
     },
     sociallogin({ commit}, loginData) {
