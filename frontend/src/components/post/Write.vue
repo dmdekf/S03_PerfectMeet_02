@@ -16,3 +16,9 @@
     </v-container> 
     </v-form> 
 </template>
+
+<script>
+export default {
+    
+}
+</script>
