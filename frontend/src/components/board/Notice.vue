@@ -1,21 +1,31 @@
 <template> 
-    <v-container> 
-    <v-data-table :headers="headers" :items-per-page="5" class="elevation-1" @click:row="rowClick" > 
+    <v-container class="p-0"> 
+        
+        <v-row class="my-2"> 
+            <v-spacer></v-spacer>
+            <v-btn class="mr-3" color="primary" @click="writeClick" > 작성 </v-btn>
+        </v-row>
+        <v-data-table :headers="headers" :items="board_lists" :items-per-page="5" class="elevation-1" @click:row="rowClick" > 
+        <template v-slot:item.created="{ item }">
+        <span>{{new Date(item.created).toLocaleString()}}</span>
+        </template>
         </v-data-table> 
-        <v-row> 
-            <v-btn outlined color="blue" @click="writeClick" > 작성 </v-btn>
-        </v-row> 
+        
     </v-container> 
 </template> 
 <script> 
+import { mapState, mapActions } from 'vuex'
 export default { 
     methods: { 
+        ...mapActions(['getBoardLists']),
         writeClick() {
              this.$router.push('/board/write')
         },
         rowClick(){
-
         }
+    },
+    computed:{
+        ...mapState(['board_lists'])
     },
     data () { 
         return { 
@@ -23,18 +33,23 @@ export default {
                 text: 'Number', 
                 align: 'left',
                  sortable: false,
-                  value: 'number', 
+                  value: 'id', 
             }, { 
-                text: 'Title', 
-                value: 'title' 
-                }, 
-                {
-                     text: 'Reg Date',
-                      value: 'regDt' 
-                } ], 
-                desserts: [],
-                } 
-            }
+                text: '제목', 
+                value: 'subject' 
+            }, {
+                text: '작성 시간',
+                value: 'created' 
+            }, {
+                text: '조회수',
+                value:'hit'
+            }], 
+            } 
+        },
+    mounted(){
+        this.getBoardLists()
+        console.log(this.board_lists)
+    },
 
 }
 </script> 

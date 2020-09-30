@@ -25,7 +25,7 @@ export default new Vuex.Store({
     },
     select_userpurpose: "",
     data_list: "",
-    board_list: "",
+    board_lists: []
   },
   getters: {
     info: (state) => ({
@@ -35,6 +35,7 @@ export default new Vuex.Store({
     }),
     isLoggedIn: (state) => !!state.token,
   },
+
   mutations: {
     SET_AUTHTOKEN(state, { auth_token }) {
       state.auth_token = auth_token;
@@ -51,8 +52,8 @@ export default new Vuex.Store({
     SET_NICKNAME(state, { nickname }) {
       state.nickname = nickname;
     },
-    SET_BOARDLIST(state, { board_list }) {
-      state.board_list = board_list;
+    SET_BOARDLISTS(state, { board_lists }) {
+      state.board_lists = board_lists;
     },
   },
   actions: {
@@ -65,7 +66,6 @@ export default new Vuex.Store({
         })
         .catch((err) => console.log(err.response.data));
     },
-
     signup({ commit }, signupData) {
       axios({
         method: "post",
@@ -171,6 +171,27 @@ export default new Vuex.Store({
             router.push({ name: "MAIN" });
           });
       }
+    },
+    getBoardLists({
+      state
+    }) {
+      axios({
+        method: "get",
+        url: SERVER.URL + "/feature/board/list"
+      })
+        .then((res) => {
+          if (res.data) {
+            console.log(res.data)
+            state.board_lists = res.data
+          }
+        })
+        .catch((error)=> {
+          if (error.response) {
+            console.log(error.response.data);
+          } else {
+            console.log(error.request);
+          }
+        })
     },
   },
 });
