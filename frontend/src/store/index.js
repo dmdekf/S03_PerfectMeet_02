@@ -15,49 +15,55 @@ export default new Vuex.Store({
     token: "",
     email: "",
     status: "",
-    nickname:"",
+    nickname: "",
     login_user: "",
     auth_token: "",
     select_map: "",
     select_userinfo: {
       gender: "",
-      age:""
+      age: "",
     },
-    select_userpurpose:"",
+    select_userpurpose: "",
+    data_list: "",
+    board_list: "",
   },
   getters: {
-    info: state => ({
+    info: (state) => ({
       status: state.status,
       token: state.token,
-      auth_token: state.auth_token
+      auth_token: state.auth_token,
     }),
-    isLoggedIn: state => !!state.token,
+    isLoggedIn: (state) => !!state.token,
   },
   mutations: {
     SET_AUTHTOKEN(state, { auth_token }) {
-      state.auth_token = auth_token
+      state.auth_token = auth_token;
     },
     SET_TOKEN(state, { token }) {
-      state.token = token
+      state.token = token;
     },
     SET_EMAIL(state, { email }) {
-      state.email = email
+      state.email = email;
     },
     SET_STATUS(state, { status }) {
-      state.status = status
+      state.status = status;
     },
     SET_NICKNAME(state, { nickname }) {
-      state.nickname = nickname 
+      state.nickname = nickname;
+    },
+    SET_BOARDLIST(state, { board_list }) {
+      state.board_list = board_list;
     },
   },
   actions: {
     postAuthData({ commit }, info) {
-      axios.post(SERVER.URL + info.location, info.data)
-        .then(res => {
-          commit('SET_TOKEN', res.headers["jwt-auth-token"])
-          router.push({ name: 'Home' })
+      axios
+        .post(SERVER.URL + info.location, info.data)
+        .then((res) => {
+          commit("SET_TOKEN", res.headers["jwt-auth-token"]);
+          router.push({ name: "Home" });
         })
-        .catch(err => console.log(err.response.data))
+        .catch((err) => console.log(err.response.data));
     },
 
     signup({ commit }, signupData) {
@@ -70,103 +76,101 @@ export default new Vuex.Store({
           nickname: signupData.nickname,
         },
       })
-        .then(res => {
+        .then((res) => {
           if (res.data.status) {
-            commit('SET_TOKEN', res.data.key)
+            commit("SET_TOKEN", res.data.key);
             this.$router.push("/");
           }
         })
-        .catch(err => console.log(err.response.data))
+        .catch((err) => console.log(err.response.data));
     },
     login({ commit, getters }, loginData) {
       axios({
-        method: 'post',
+        method: "post",
         url: SERVER.URL + "/user/signin",
         data: {
-          email: loginData.email, password: loginData.password
-        }
+          email: loginData.email,
+          password: loginData.password,
+        },
       })
         .then((res) => {
           if (res.data.status) {
-            commit('SET_TOKEN', { token: res.headers["jwt-auth-token"] })
-            commit('SET_EMAIL', { email: res.data.data.email })
-            commit('SET_USER', { login_user: res.data.data.uid })
-            commit('SET_STATUS', { status: res.data.status })
-            getters.config
-            router.push({ name: "MAIN" })
+            commit("SET_TOKEN", { token: res.headers["jwt-auth-token"] });
+            commit("SET_EMAIL", { email: res.data.data.email });
+            commit("SET_USER", { login_user: res.data.data.uid });
+            commit("SET_STATUS", { status: res.data.status });
+            getters.config;
+            router.push({ name: "MAIN" });
           }
         })
-			.catch(e => {
-					console.log(e.response.data)
-			});
+        .catch((e) => {
+          console.log(e.response.data);
+        });
     },
-    sociallogin({ commit}, loginData) {
-      commit('SET_AUTHTOKEN', { auth_token: loginData.auth_token })
-      const email = loginData.email
+    sociallogin({ commit }, loginData) {
+      commit("SET_AUTHTOKEN", { auth_token: loginData.auth_token });
+      const email = loginData.email;
       axios({
-          method: 'post',
-          url: SERVER.URL + "/user/socialsignin",
-          data: {
-            email
-          }
-        })
+        method: "post",
+        url: SERVER.URL + "/user/socialsignin",
+        data: {
+          email,
+        },
+      })
         .then((res) => {
           if (res.data.status) {
-            commit('SET_TOKEN', { token: res.headers["jwt-auth-token"] })
-            commit('SET_EMAIL', { email: res.data.data.email })
-            commit('SET_USER', { login_user: res.data.data.uid })
-            commit('SET_STATUS', { status: res.data.status })
-            
-					} else {
-						alert('error')
+            commit("SET_TOKEN", { token: res.headers["jwt-auth-token"] });
+            commit("SET_EMAIL", { email: res.data.data.email });
+            commit("SET_USER", { login_user: res.data.data.uid });
+            commit("SET_STATUS", { status: res.data.status });
+          } else {
+            alert("error");
           }
         })
-        .catch(function (error) {
+        .catch(function(error) {
           if (error.response) {
             console.log(error.response.data);
-          }
-          else {
+          } else {
             console.log(error.request);
           }
         })
         .then(() => {
-          router.push({ name: "MAIN" })
-        })
-      
+          router.push({ name: "MAIN" });
+        });
     },
     logout({ commit, state }) {
-      commit('SET_TOKEN', { token: "" })
-      commit('SET_EMAIL', { email: "" })
-      commit('SET_USER', { login_user: "" })
-      commit('SET_STATUS', { status: "" })
+      commit("SET_TOKEN", { token: "" });
+      commit("SET_EMAIL", { email: "" });
+      commit("SET_USER", { login_user: "" });
+      commit("SET_STATUS", { status: "" });
       if (state.auth_token) {
         axios({
           method: "POST",
-          url: "https://cors-anywhere.herokuapp.com/https://kapi.kakao.com/v1/user/logout",
+          url:
+            "https://cors-anywhere.herokuapp.com/https://kapi.kakao.com/v1/user/logout",
           headers: {
-            "Authorization": 'Bearer ' + state.auth_token,
-            "Content-type": 'application/x-www-form-urlencoded;charset=utf-8'
+            Authorization: "Bearer " + state.auth_token,
+            "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
           },
         })
           .then(() => {
-            commit('SET_AUTHTOKEN', { auth_token: "" })
+            commit("SET_AUTHTOKEN", { auth_token: "" });
           })
-          .catch(function (error) {
+          .catch(function(error) {
             if (error.response) {
               console.log(error.response.data);
-            }
-            else {
+            } else {
               console.log(error.request);
             }
           })
           .then(() => {
-            storagesession.clear()
-            storagelocal.clear()
+            storagesession.clear();
+            storagelocal.clear();
           })
           .then(() => {
-            router.push({ name: "MAIN" })
-          })
+            router.push({ name: "MAIN" });
+          });
       }
     },
   },
-})
+});

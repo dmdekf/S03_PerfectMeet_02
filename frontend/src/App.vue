@@ -21,7 +21,7 @@
             <v-list-item-title>restruant</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-         <v-list-item link @click="$router.push('/post/notice')">
+         <v-list-item link @click="$router.push('/board/notice')">
           <v-list-item-action>
             <v-icon>mdi-star</v-icon>
           </v-list-item-action>

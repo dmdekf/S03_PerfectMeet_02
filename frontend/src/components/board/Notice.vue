@@ -11,7 +11,7 @@
 export default { 
     methods: { 
         writeClick() {
-             this.$router.push('/post/write')
+             this.$router.push('/board/write')
         },
         rowClick(){
 

@@ -31,17 +31,7 @@
 <script>
 	export default {
 		name:"Main",
-		data: () => {
-			return{
-				images:[],
-				limit:0,
-			}
-		},
-		methods:{
-			getImages() {
-
-			}
-		}
+		
 }
 </script>
 
