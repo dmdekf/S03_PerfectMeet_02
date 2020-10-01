@@ -4,7 +4,7 @@
         <v-window class="mb-6">
         <v-window-item class="my-6">
         <v-card flat>
-        <v-card-title class="blue lighten-5">
+        <v-card-title class="orange lighten-5">
             <v-list-item>
             <v-list-item-content>
             <v-list-item-subtitle><small>#{{id}}번 글</small></v-list-item-subtitle>
@@ -30,7 +30,7 @@
             </v-list-item>
         </v-card-title>
         
-        <v-card-text >
+        <v-card-text class="orange lighten-5" >
             <div v-html="content">{{content}}</div>
         </v-card-text>
         </v-card>
