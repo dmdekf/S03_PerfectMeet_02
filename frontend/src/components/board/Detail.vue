@@ -9,9 +9,9 @@
             <v-list-item-content>
             <v-list-item-subtitle><small>#{{id}}번 글</small></v-list-item-subtitle>
             <v-list-item-title class="headline my-2">제목 :  {{ subject }}</v-list-item-title>
-            <hr/>
+            
             <v-row justify="space-around"  class="child-flex">
-            <div class="ml-3"><small>작성날짜:{{new Date(created).toLocaleString()}}</small></div>
+            <div class="ml-4"><small>작성날짜:{{new Date(created).toLocaleString()}}</small></div>
                 <div>
                     <div v-if="(nickname)===this.$store.state.nickname">
                     <v-btn  v-on:click="updatePost(id)">
@@ -31,7 +31,7 @@
         </v-card-title>
         
         <v-card-text class="orange lighten-5" >
-            <div v-html="content">{{content}}</div>
+            <div class="ml-4" v-html="content">{{content}}</div>
         </v-card-text>
         </v-card>
     </v-window-item>
@@ -72,17 +72,7 @@ export default {
                 this.nickname = res.data.nickname
             })
             .catch((err) => console.error(err));
-        axios({
-            method : "post",
-            url :  SERVER.URL + "/boardImg/"+this.id,
-        }).then((res)=>{
-            if(res.data.status){
-                this.boardImageList = res.data.object
-                console.dir(this.boardImageList)
-                
-            }
-        })
-        console.log("실행은 되나..")
+        console.log("디테일 실행중...")
 
     },
 }

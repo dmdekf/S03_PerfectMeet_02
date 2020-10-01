@@ -51,22 +51,17 @@
                                             <v-text-field block v-model="signupData.verify" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, passwordMatch]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="Confirm Password" counter @click:append="show1 = !show1"></v-text-field>
                                         </v-col>
 																				<v-col cols="12" align="center" justify="center">
-                                        <input
-																					id = "file-selector"
-																					ref="file"
-																					type="file"
-																					/>
-																					<v-btn  color="primary">프로필 사진 업로드</v-btn>
+                                        <v-file-input
+                                          :rules="filerules"
+                                          v-model="imagefile"
+                                          accept="image/png, image/jpeg, image/bmp"
+                                          show-size
+                                          placeholder="Pick an avatar"
+                                          prepend-icon="mdi-camera"
+                                          label="Avatar"
+                                        ></v-file-input>
+                                        <v-btn color="primary" @click="onUpload">파일 업로드</v-btn>
 																				</v-col>
-																			
-																					<!-- <v-container fluid :v-show="profileUrl" max-height="400"> -->
-																					<v-row justify="center" align="center" max-height="400">
-																					<v-col cols="8" aspect-ratio="2" contain  align="center" justify="center" max-height="400">
-																					<!-- <v-img  v-if="profileUrl" :src="url" aspect-ratio="2" max-width="200" max-height="400"> -->
-																					<!-- </v-img> -->
-																					</v-col>
-																					</v-row>
-																					<!-- </v-container> -->
                                     </v-row>
                                 </v-form>
 																<v-card-actions>
@@ -84,6 +79,8 @@
 </div>
 </template>
 <script>
+import axios from "axios";
+import SERVER from "@/api/api";
 import { mapState, mapActions } from 'vuex'
 export default {
   el: '#app',
@@ -95,6 +92,20 @@ export default {
   },
   methods: {
     ...mapActions(['login','signup']),
+    onUpload() {
+      console.log(this.imagefile.name)
+      axios({
+        method: "post",
+        url: SERVER.URL +"/feature/upload/uploadFile",
+        data: {
+          file : this.imagefile,
+        },
+      })
+        .then((res) => {
+            console.log(res.data.fileName)
+        })
+        .catch((err) => console.error(err));
+    },
     loginvalidate(loginData) {
       if (this.$refs.loginForm.validate()) {
         this.login(loginData)
@@ -115,6 +126,8 @@ export default {
     }
   },
   data: () => ({
+    imagefile:null,
+    imageUrl:null,
     dialog: true,
     tab: 0,
     tabs: [
@@ -146,7 +159,10 @@ export default {
     rules: {
       required: value => !!value || "Required.",
       min: v => (v && v.length >= 8) || "Min 8 characters"
-    }
+    },
+    filerules: [
+        value => !value || value.size < 200000000 || 'Avatar size should be less than 200 MB!',
+      ],
   })
 }
 </script>
