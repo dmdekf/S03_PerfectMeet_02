@@ -5,7 +5,7 @@
             <v-spacer></v-spacer>
             <v-btn class="mr-3" color="primary" @click="writeClick" > 작성 </v-btn>
         </v-row>
-        <v-data-table :headers="headers" :items="board_lists" :items-per-page="5" class="elevation-1" @click:row="rowClick" > 
+        <v-data-table :headers="headers" :items="board_lists" :items-per-page="5" class="elevation-1" @click:row="showDetail"  > 
         <template v-slot:item.created="{ item }">
         <span>{{new Date(item.created).toLocaleString()}}</span>
         </template>
@@ -21,7 +21,9 @@ export default {
         writeClick() {
              this.$router.push('/board/write')
         },
-        rowClick(){
+        showDetail(item){
+            console.log(item.id)
+            this.$router.push(`/board/detail/${item.id}`);
         }
     },
     computed:{
@@ -29,6 +31,7 @@ export default {
     },
     data () { 
         return { 
+            selectedId:"",
             headers: [ { 
                 text: 'Number', 
                 align: 'left',

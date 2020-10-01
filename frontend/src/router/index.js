@@ -11,7 +11,7 @@ import choice from "../components/SelectUserPurpose.vue";
 
 import notice from "../components/board/Notice.vue";
 import boardWrite from "../components/board/Write.vue";
-
+import boardDetail from "../components/board/Detail.vue";
 Vue.use(BootstrapVue)
 Vue.use(Vuex)
 Vue.use(VueRouter)
@@ -56,7 +56,17 @@ const routes = [
     path: "/board/write",
     name: "boardWrite",
     component: boardWrite,
-  }
+  },
+  {
+    path: "/board/detail/:id",
+    props: ({
+      params
+    }) => ({
+      id: Number.parseInt(params.id)
+    }),
+    name: "boardDetail",
+    component: boardDetail
+  },
 ];
 
 const router = new VueRouter({
