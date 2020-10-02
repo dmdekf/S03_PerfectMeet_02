@@ -83,7 +83,6 @@ import axios from "axios";
 import SERVER from "@/api/api";
 import { mapState, mapActions } from 'vuex'
 export default {
-  el: '#app',
   computed: {
     ...mapState,
     passwordMatch() {
@@ -142,6 +141,7 @@ export default {
       verify:""
     },
     verify: "",
+    key:"",
     loginData:{
       loginPassword: "",
       loginEmail: ""
