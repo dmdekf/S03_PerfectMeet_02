@@ -9,9 +9,9 @@ import Login from "../components/user/Login.vue";
 import Profile from "../components/user/Profile.vue";
 import choice from "../components/SelectUserPurpose.vue";
 
-import notice from "../components/post/Notice.vue";
-import postWrite from "../components/post/Write.vue";
-
+import notice from "../components/board/Notice.vue";
+import boardWrite from "../components/board/Write.vue";
+import boardDetail from "../components/board/Detail.vue";
 Vue.use(BootstrapVue)
 Vue.use(Vuex)
 Vue.use(VueRouter)
@@ -48,15 +48,25 @@ const routes = [
     component: choice,
   },
   {
-    path: "/post/notice",
+    path: "/board/notice",
     name: "notice",
     component: notice,
   },
   {
-    path: "/post/write",
-    name: "postWrite",
-    component: postWrite,
-  }
+    path: "/board/write",
+    name: "boardWrite",
+    component: boardWrite,
+  },
+  {
+    path: "/board/detail/:id",
+    props: ({
+      params
+    }) => ({
+      id: Number.parseInt(params.id)
+    }),
+    name: "boardDetail",
+    component: boardDetail
+  },
 ];
 
 const router = new VueRouter({

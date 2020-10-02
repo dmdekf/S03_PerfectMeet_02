@@ -30,8 +30,7 @@ public class SignupRequestDTO {
     
     @ApiModelProperty(required = true)
     @NotNull
-    int age;
-    
+    int age; 
     @ApiModelProperty(required = true)
     @NotNull
     boolean gender;
