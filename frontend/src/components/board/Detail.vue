@@ -14,11 +14,8 @@
             <div class="ml-4"><small>작성날짜:{{new Date(created).toLocaleString()}}</small></div>
                 <div>
                     <div v-if="(nickname)===this.$store.state.nickname">
-                    <v-btn color="primary"  v-on:click="updatePost(id)">
-                        글 수정하기
-                    </v-btn>
-                    <v-btn color="red" v-on:click="deletePost(id)">
-                        글 삭제하기
+                    <v-btn  v-on:click="updatePost(id)">
+                        <v-icon>mdi-playlist-edit</v-icon>글 수정하기
                     </v-btn>
                     </div>
                     <div v-else>
@@ -61,19 +58,7 @@ export default {
             nickname:'',
     }},
     methods:{
-    deletePost(postId) {
-        axios({
-            method:"delete",
-            url:SERVER.URL +"/feature/board/delete/"+postId,
-            })
-            .then((res)=>{
-                let msg = postId+"번 글 삭제가 완료됐습니다.";
-                alert(msg); 
-                this.$router.push("/");
-                console.log(res.data);
-            })
-            .catch((err) => console.error(err));
-        
+    
     },
     created() {
         console.log(this.id)
@@ -87,9 +72,8 @@ export default {
                 this.nickname = res.data.nickname
             })
             .catch((err) => console.error(err));
-            console.log("디테일 실행중...")
-        
-        }
+        console.log("디테일 실행중...")
+
     },
 }
 </script>

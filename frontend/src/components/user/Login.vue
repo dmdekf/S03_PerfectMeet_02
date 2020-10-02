@@ -93,7 +93,6 @@ export default {
   methods: {
     ...mapActions(['login','signup']),
     onUpload() {
-      console.log(this.file)
       console.log(this.imagefile.name)
       axios({
         method: "post",
