@@ -78,7 +78,7 @@ public class UserController {
 			try {
 				UserAuth user = userService.signup(request,key);
 				mailSendService.mailSendWithUserKey(user.getEmail(), user.getNickname(), key, user.getId());
-				
+				 
 			}catch(MessagingException e) {
 				errors.put("field", "sendMail");
 
