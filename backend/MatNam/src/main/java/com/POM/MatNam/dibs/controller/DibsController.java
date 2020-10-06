@@ -23,6 +23,7 @@ import com.POM.MatNam.response.BasicResponse;
 import com.POM.MatNam.response.ErrorResponse;
 import com.POM.MatNam.review.DTO.Review;
 import com.POM.MatNam.store.dao.StoreDao;
+import com.POM.MatNam.store.dto.ResponseStore;
 import com.POM.MatNam.store.dto.Store;
 import com.POM.MatNam.user.dto.User;
 import com.POM.MatNam.user.service.UserService;
@@ -93,15 +94,16 @@ public class DibsController {
 		Map<String, Object> errors = new HashMap<>();
 		User user = userService.selectByNickname(nickname);
 		List<Dibs> list = dibsService.dibsList(user.getId());
-		List<Store> storeList  = new ArrayList<>();
+		List<ResponseStore> storeList  = new ArrayList<>();
 		for(Dibs dibs:list) {
 			long sid = dibs.getStoreId();
 			Optional<Store> s = storeDao.findById(sid);
-			storeList.add(s.get());
+			Store store = s.get();
+			storeList.add(new ResponseStore(store.getId(),store.getName(),store.getAddress(),store.getTel(),store.getImage()));
 		}
 		final BasicResponse result = new BasicResponse();
 		result.status = "S-200";
-		result.message = "음식점 찜 삭제 완료했습니다.";
+		result.message = "음식점 찜 목록 반환.";
 		result.data = storeList;
 		response = new ResponseEntity<>(result, HttpStatus.OK);
 		return response;
