@@ -50,18 +50,6 @@
                                         <v-col cols="12">
                                             <v-text-field block v-model="signupData.verify" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, passwordMatch]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="Confirm Password" counter @click:append="show1 = !show1"></v-text-field>
                                         </v-col>
-																				<v-col cols="12" align="center" justify="center">
-                                        <v-file-input
-                                          :rules="filerules"
-                                          v-model="imagefile"
-                                          accept="image/png, image/jpeg, image/bmp"
-                                          show-size
-                                          placeholder="Pick an avatar"
-                                          prepend-icon="mdi-camera"
-                                          label="Avatar"
-                                        ></v-file-input>
-                                        <v-btn color="primary" @click="onUpload">파일 업로드</v-btn>
-																				</v-col>
                                     </v-row>
                                 </v-form>
 																<v-card-actions>

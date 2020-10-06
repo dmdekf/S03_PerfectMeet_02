@@ -2,13 +2,14 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Vuex from "vuex";
 import BootstrapVue from "bootstrap-vue";
+
 import Main from "../components/Main.vue";
 import selectMap from "../components/SelectMap.vue";
 import selectUserInfo from "../components/SelectUserInfo.vue";
-import result from "../components/Result.vue";
 
 import Login from "../components/user/Login.vue";
 import Profile from "../components/user/Profile.vue";
+import Update from "../components/user/Update.vue";
 import choice from "../components/SelectUserPurpose.vue";
 
 import notice from "../components/board/Notice.vue";
@@ -32,9 +33,24 @@ const routes = [
     component: Login,
   },
   {
-    path: '/user/profile',
-    name: 'userProfile',
+    path: '/user/profile/:nickname',
+      name: 'userProfile',
+    props: ({
+      params
+    }) => ({
+      nickname: params.nickname
+    }),
     component: Profile,
+  },
+  {
+    path: '/user/update/:nickname',
+    name: 'userUpdate',
+    props: ({
+      params
+    }) => ({
+      nickname: params.nickname
+    }),
+    component: Update,
   },
   {
     path: "/user/selectMap",
@@ -45,11 +61,6 @@ const routes = [
     path: "/user/selectUserInfo",
     name: "SELECTUSERINFO",
     component: selectUserInfo,
-  },
-  {
-    path: "/result",
-    name: "RESULT",
-    component: result,
   },
   {
     path: "/user/selectUserPurpose",
