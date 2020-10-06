@@ -19,7 +19,7 @@
                     </v-btn>
                     </div>
                     <div v-else>
-                    <v-btn icon v-on:click="userfrofile(nickname)">
+                    <v-btn icon v-on:click="userProfile(nickname)">
                         <v-icon>mdi-account</v-icon>
                     </v-btn>
                     <small>{{nickname}}</small>
@@ -58,7 +58,9 @@ export default {
             nickname:'',
     }},
     methods:{
-    
+        userProfile(nickname) {
+            this.$router.push(`/user/profile/${nickname}`);
+        },   
     },
     created() {
         console.log(this.id)
