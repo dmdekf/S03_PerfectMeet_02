@@ -501,7 +501,7 @@
                 </label>
               </div>
             </div>
-            <div class="align-area">
+            <div class="align-area"> 
               <div class="center-area">
                 <a href="javascript:history.go(-1)" class="btn round big gray">이전</a>
                 <a href="selectUserInfo" class="btn round big red" id="btnNext">다음</a>
@@ -513,9 +513,10 @@
     </div>
   </div>
 </template>
+
+
 <script>
-  export default {
-  };
+  
 </script>
 
 <style scoped>
@@ -526,7 +527,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: auto;
+  margin: auto; 
 }
 .map-road-sub-copy {
   margin-top: 40px;
@@ -669,29 +670,6 @@ video {
   line-height: 38px;
   font-family: Moebius;
 }
-/* word-break: keep-all;
-cursor: pointer;
-vertical-align: baseline;
-padding: 0;
-margin: 0;
-overflow: visible; 
-background: transparent;
-font: normal normal 100%/160% "나눔고딕", NanumGothic, "Segoe UI", AppleSDGothicNeo, "Apple SD Gothic Neo", "Apple SD 고딕 Neo", "Microsoft NeoGothic", "Droid sans", Verdana, Arial, sans-serif;
-text-decoration: none;
-text-shadow: none;
-box-sizing: border-box;
-transition: all .3s ease;
-display: inline-block;
-width: 100%;
-height: 40px;
-line-height: 38px;
-font-family: Moebius;
-font-size: 16px;
-text-align: center;
-border: 2px #999 solid;
-border-radius: 99em;
-color: #000;
-border-color: #000; */
 :not(svg) {
   transform-origin: 0px 0px;
 }

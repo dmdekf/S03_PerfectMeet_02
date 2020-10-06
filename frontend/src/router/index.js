@@ -5,6 +5,8 @@ import BootstrapVue from "bootstrap-vue";
 import Main from "../components/Main.vue";
 import selectMap from "../components/SelectMap.vue";
 import selectUserInfo from "../components/SelectUserInfo.vue";
+import result from "../components/Result.vue";
+
 import Login from "../components/user/Login.vue";
 import Profile from "../components/user/Profile.vue";
 import choice from "../components/SelectUserPurpose.vue";
@@ -12,6 +14,8 @@ import choice from "../components/SelectUserPurpose.vue";
 import notice from "../components/board/Notice.vue";
 import boardWrite from "../components/board/Write.vue";
 import boardDetail from "../components/board/Detail.vue";
+
+
 Vue.use(BootstrapVue)
 Vue.use(Vuex)
 Vue.use(VueRouter)
@@ -43,6 +47,11 @@ const routes = [
     component: selectUserInfo,
   },
   {
+    path: "/result",
+    name: "RESULT",
+    component: result,
+  },
+  {
     path: "/user/selectUserPurpose",
     name: "SELECTUSERPURPOSE",
     component: choice,
@@ -52,6 +61,7 @@ const routes = [
     name: "notice",
     component: notice,
   },
+
   {
     path: "/board/write",
     name: "boardWrite",
