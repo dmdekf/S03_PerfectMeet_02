@@ -14,12 +14,12 @@
                   <v-form ref="registerForm" v-model="valid" lazy-validation>
                     <v-text-field
                         prepend-icon="mdi-emoticon-cool-outline"
-                        v-model="nickName" id="nickname"
-                        label="nickName"
+                        v-model="nickname" id="nickname"
+                        type="text"
+                        label="nickname"
                         outlined
                         readonly
                         dense
-                        type="text"
                     ></v-text-field>
                     <v-text-field
                         prepend-icon="mdi-email"
@@ -38,7 +38,7 @@
                   <v-spacer></v-spacer>
                   <v-btn color="primary" :disabled="!valid" v-on:click="moveUpdate">수정하기</v-btn>
                   <v-btn color="red" v-on:click="Delete">탈퇴하기</v-btn>
-                  <v-btn color="lime" v-on:click="moveList">메인화면</v-btn>
+                  <v-btn color="lime"  @click="$router.push('/')" >메인화면</v-btn>
                 </v-card-actions>
                 </v-card-text>
               </v-card> 

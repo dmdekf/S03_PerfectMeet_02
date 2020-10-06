@@ -47,7 +47,7 @@
           <v-btn rounded class="ma-2" color="primary" to="/search" >
             <v-icon>mdi-magnify</v-icon>검색하기
           </v-btn>
-          <v-btn class="ma-2" outlined color="white" to="/user/logout" >
+          <v-btn class="ma-2" outlined color="white" v-on:click="logout">
             로그아웃
           </v-btn>
           <v-btn class="ma-2" outlined color="white" v-on:click="userProfile">
@@ -96,7 +96,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'App',
   computed: {
@@ -110,6 +110,7 @@ export default {
     
   }),
   methods:{
+    ...mapActions(['logout']),
     userProfile(){
       const nickname = this.$store.state.nickname
             this.$router.push(`/user/profile/${nickname}`);
