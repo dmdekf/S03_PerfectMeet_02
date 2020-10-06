@@ -2,13 +2,12 @@ import Vue from "vue";
 import Vuex from "vuex";
 
 import axios from "axios";
-// import Cookies from 'js-cookie'
 
 import router from "@/router";
-// import createPersistedState from 'vuex-persistedstate';
+import SERVER from "@/api/api";
+
 const storagesession = window.sessionStorage;
 const storagelocal = window.localStorage;
-import SERVER from "@/api/api";
 Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
@@ -68,6 +67,7 @@ export default new Vuex.Store({
         .catch((err) => console.log(err.response.data));
     },
     signup({ commit }, signupData) {
+      console.log(signupData)
       axios({
         method: "post",
         url: SERVER.URL + "/user",
@@ -99,9 +99,9 @@ export default new Vuex.Store({
           console.log(res);
           if (res.data.status) {
             commit("SET_TOKEN", { token: res.headers["jwt-auth-token"] });
-            commit("SET_EMAIL", { email: res.data.data.email });
-            commit("SET_USER", { login_user: res.data.data.uid });
-            commit("SET_STATUS", { status: res.data.status });
+            commit("SET_NICKNAME", {
+              nickname: res.headers["nickname"]
+            });
             getters.config;
             router.push({ name: "MAIN" });
           }
