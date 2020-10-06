@@ -41,14 +41,18 @@ public class UploadFile {
     @Column(name="mime_type")
     private String mimeType;
     
+    @Column(name = "review_id")
+    private int reviewId;
+    
     @CreationTimestamp    // 입력시 시간 정보를 자동으로 입력해는 어노테이션.
     @Column(name="insert_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date insertDate;
-    public UploadFile(String fileName, long size, String mimeType) {
+    public UploadFile(String fileName, long size, String mimeType,int reviewId) {
         this.fileName = fileName;
         this.size = size;
         this.mimeType = mimeType;
+        this.reviewId = reviewId;
     }
  
 }

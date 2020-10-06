@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ private final Path fileLocation;
             throw new FileUploadException("파일을 업로드할 디렉토리를 생성하지 못했습니다.", e);
         }
     }
-    public UploadFile storeFile(MultipartFile file) {
+    public UploadFile storeFile(MultipartFile file,int id) {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         
         try {
@@ -49,7 +50,7 @@ private final Path fileLocation;
             
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
             
-            UploadFile uploadFile = new UploadFile(fileName, file.getSize(), file.getContentType());
+            UploadFile uploadFile = new UploadFile(fileName, file.getSize(), file.getContentType(),id);
             fileDAO.save(uploadFile);
             
             return uploadFile;
@@ -82,11 +83,11 @@ private final Path fileLocation;
             return  iterable;
         }
         
-        public Optional<UploadFile> getUploadFile(int id) {
-            Optional<UploadFile> uploadFile = fileDAO.findById(id);
+        public List<UploadFile> getUploadFile(int rid) {
+            List<UploadFile> uploadFile = fileDAO.findByReviewId(rid);
             
             if(null == uploadFile) {
-                throw new FileDownloadException("해당 아이디["+id+"]로 업로드 된 파일이 존재하지 않습니다.");
+                throw new FileDownloadException("해당 아이디["+rid+"]로 업로드 된 파일이 존재하지 않습니다.");
             }
             return uploadFile;
         }

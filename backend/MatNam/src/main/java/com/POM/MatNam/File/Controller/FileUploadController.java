@@ -44,22 +44,22 @@ public class FileUploadController {
         return service.getFileList();
     }
     
-    @GetMapping("/uploadFile/{id}")
-    public Optional<UploadFile> getUploadFile(@PathVariable int id){
-        return service.getUploadFile(id);
+    @GetMapping("/uploadFile/{rid}")
+    public List<UploadFile> getUploadFile(@PathVariable int rid){
+        return service.getUploadFile(rid);
     }
-    @PostMapping("/uploadFile")
-    public UploadFile uploadFile(@RequestParam("file") MultipartFile file) {
-        UploadFile uploadFile = service.storeFile(file);
+    @PostMapping("/uploadFile/{rid}")
+    public UploadFile uploadFile(@RequestParam("file") MultipartFile file, @PathVariable int rid) {
+        UploadFile uploadFile = service.storeFile(file,rid);
         
         return uploadFile;
     }
     
-    @PostMapping("/uploadMultipleFiles")
-    public List<UploadFile> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files){
+    @PostMapping("/uploadMultipleFiles/{rid}")
+    public List<UploadFile> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files,@PathVariable int rid){
         return Arrays.asList(files)
                 .stream()
-                .map(file -> uploadFile(file))
+                .map(file -> uploadFile(file,rid))
                 .collect(Collectors.toList());
     }
     
