@@ -514,10 +514,10 @@
   </div>
 </template>
 <script>
-export default {
-  el: "map-road",
-};
+  export default {
+  };
 </script>
+
 <style scoped>
 .align-area {
   margin-top: 60px;

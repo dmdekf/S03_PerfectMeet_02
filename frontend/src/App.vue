@@ -21,7 +21,7 @@
             <v-list-item-title>restruant</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-         <v-list-item link @click="$router.push('/post/notice')">
+         <v-list-item link @click="$router.push('/board/notice')">
           <v-list-item-action>
             <v-icon>mdi-star</v-icon>
           </v-list-item-action>
@@ -56,7 +56,7 @@
           </div>
           <div v-if="!isLoggedIn">        
           <v-btn class="ma-2" outlined color="white" to="/user/login" >
-            <v-icon>mdi-account-outline</v-icon>로그인
+            <v-icon>mdi-account-outline</v-icon>로그인 & 회원가입
           </v-btn>
         </div>
     </v-app-bar>

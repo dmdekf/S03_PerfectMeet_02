@@ -1,10 +1,11 @@
 <template>
 	<v-app id="inspire" class="my-3">
+		<v-btn class="my-3" color="deep-orange accent-3" outlined rounded to="/user/selectMap">
+			시작하기
+		</v-btn>
 			<div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
 				<ol class="carousel-indicators">
 					<li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
-					<li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
-					<li data-target="#carouselExampleCaptions" data-slide-to="2"></li>
 				</ol>
 				<div class="carousel-inner">
 					<div class="carousel-item active">
@@ -30,17 +31,7 @@
 <script>
 	export default {
 		name:"Main",
-		data: () => {
-			return{
-				images:[],
-				limit:0,
-			}
-		},
-		methods:{
-			getImages() {
-
-			}
-		}
+		
 }
 </script>
 
