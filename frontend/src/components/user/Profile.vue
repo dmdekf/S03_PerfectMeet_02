@@ -128,7 +128,7 @@ export default {
                 url: SERVER.URL+"/dibs",
             })
                 .then((res) => { 
-                    this.likes = res.data.dibs           
+                    this.likes = res.data.data        
                 })
                 .catch((err) => console.log(err.response.data));
         }
