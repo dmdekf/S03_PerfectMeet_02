@@ -6,7 +6,7 @@
             <div class="map-road-choice step03">
                     <div class="item item01">
                         <label for="forWho1">
-                            <input type="radio" id="forWho1" name="forWho" value="ME">
+                            <input type="radio" id="forWho1" name="forWho" value="6">
                                 <i>
                                     <span class="img sex02"></span>
                                     <strong>
@@ -19,7 +19,7 @@
                     
                     <div class="item item02">
                         <label for="forWho2">
-                            <input type="radio" id="forWho2" name="forWho" value="PARTNER">
+                            <input type="radio" id="forWho2" name="forWho" value="7">
                             <i>
                                 <span class="img"></span>
                                 <strong>
@@ -31,7 +31,7 @@
                 
                     <div class="item item03">
                         <label for="forWho3">
-                            <input type="radio" id="forWho3" name="forWho" value="PARENTS">
+                            <input type="radio" id="forWho3" name="forWho" value="8">
                                 <i>
                                 <span class="img"></span>
                                     <strong>
@@ -44,7 +44,7 @@
                     
                     <div class="item item04">
                         <label for="forWho4">
-                            <input type="radio" id="forWho4" name="forWho" value="CHILD">
+                            <input type="radio" id="forWho4" name="forWho" value="9">
                                 <i>
                                     <span class="img"></span>
                                     <strong>
@@ -57,13 +57,26 @@
             </div>
             <div class="align-area">
                 <div class="center-area">
-                    <a href="javascript:history.go(-1)" class="btn round big gray">이전</a>
-                    <a href="javascript:void(0);" class="btn round big red" id="btnNext">다음</a>
+                    <a href="#" class="btn round big gray" @click="prev">이전</a>
+                    <a href="#" class="btn round big red" id="btnNext" @click="next">다음</a>
                 </div>
             </div>
         </div>
     </div>
 </template> 
+<script>
+export default {
+    methods: {
+        prev(){
+            this.$emit('prev');
+        },
+        next(){
+            var p = document.querySelector("input[name=forWho]:checked").value;
+            this.$emit('next', p);
+        }
+    },
+}
+</script>
 <style scoped>
 .map-road-choice { margin-top: 20px; text-align: center; }
 .map-road-choice .item { display: inline-block; vertical-align: top; margin-top: 20px; }

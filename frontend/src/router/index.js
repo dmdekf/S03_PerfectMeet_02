@@ -2,16 +2,18 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Vuex from "vuex";
 import BootstrapVue from "bootstrap-vue";
+
 import Main from "../components/Main.vue";
-import selectMap from "../components/SelectMap.vue";
-import selectUserInfo from "../components/SelectUserInfo.vue";
+import Recommand from '../components/Recommand.vue';
+
 import Login from "../components/user/Login.vue";
 import Profile from "../components/user/Profile.vue";
-import choice from "../components/SelectUserPurpose.vue";
-
+import Update from "../components/user/Update.vue";
 import notice from "../components/board/Notice.vue";
 import boardWrite from "../components/board/Write.vue";
 import boardDetail from "../components/board/Detail.vue";
+
+import reviewWrite from "../components/review/Write.vue"
 Vue.use(BootstrapVue)
 Vue.use(Vuex)
 Vue.use(VueRouter)
@@ -28,30 +30,36 @@ const routes = [
     component: Login,
   },
   {
-    path: '/user/profile',
-    name: 'userProfile',
+    path: '/user/profile/:nickname',
+      name: 'userProfile',
+    props: ({
+      params
+    }) => ({
+      nickname: params.nickname
+    }),
     component: Profile,
+  },
+  {
+    path: '/user/update/:nickname',
+    name: 'userUpdate',
+    props: ({
+      params
+    }) => ({
+      nickname: params.nickname
+    }),
+    component: Update,
   },
   {
     path: "/user/selectMap",
     name: "SELECTMAP",
-    component: selectMap,
-  },
-  {
-    path: "/user/selectUserInfo",
-    name: "SELECTUSERINFO",
-    component: selectUserInfo,
-  },
-  {
-    path: "/user/selectUserPurpose",
-    name: "SELECTUSERPURPOSE",
-    component: choice,
+    component: Recommand,
   },
   {
     path: "/board/notice",
     name: "notice",
     component: notice,
   },
+
   {
     path: "/board/write",
     name: "boardWrite",
@@ -67,6 +75,17 @@ const routes = [
     name: "boardDetail",
     component: boardDetail
   },
+  {
+    path: "/review/:storeId/write",
+    props: ({
+      params
+    }) => ({
+      storeId: Number.parseInt(params.storeId)
+    }),
+    name: "reviewWrite",
+    component: reviewWrite,
+  },
+  
 ];
 
 const router = new VueRouter({
