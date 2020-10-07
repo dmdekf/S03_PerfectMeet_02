@@ -23,7 +23,7 @@
                             <i>
                                 <span class="img"></span>
                                 <strong>
-                                        데이트
+                                        회식
                                 </strong>
                             </i>
                         </label>
@@ -35,7 +35,7 @@
                                 <i>
                                 <span class="img"></span>
                                     <strong>
-                                            가족 모임
+                                            데이트
                                     </strong>
                                 </i>
                         </label>
@@ -48,7 +48,7 @@
                                 <i>
                                     <span class="img"></span>
                                     <strong>
-                                            회식
+                                        가족 모임
                                     </strong>
                                 </i>
                         </label>

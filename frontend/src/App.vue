@@ -44,9 +44,7 @@
       <v-spacer></v-spacer>
       <div v-if="isLoggedIn">
           <small class="font-weight-bold">{{ this.$store.state.nickname }}</small>님 환영합니다.
-          <v-btn rounded class="ma-2" color="primary" to="/search" >
-            <v-icon>mdi-magnify</v-icon>검색하기
-          </v-btn>
+          
           <v-btn class="ma-2" outlined color="white" v-on:click="logout">
             로그아웃
           </v-btn>
@@ -84,7 +82,11 @@
       >
       
       <div class="white--text text-center">
-        &copy; {{ new Date().getFullYear() }} made by<a href="https://github.com/gyw8526"> @gyw8526 </a> <a href="https://github.com/dmdekf"> @dmdekf </a> <a href="https://lab.ssafy.com/lshmn951"> @lshmn951 </a> <a href="https://lab.ssafy.com/twoposition"> @wjsgudwls89 </a>
+        &copy; {{ new Date().getFullYear() }} made by
+        <a href="https://github.com/gyw8526"> Youngwook Go, </a> 
+        <a href="https://github.com/dmdekf"> Yunji Na, </a> 
+        <a href="https://github.com/lshmn951"> Sung Hyeon Lee, </a> 
+        <a href="https://github.com/wjsgudwls89"> Hyung jin Jeon. </a>
       </div>
       </v-col>
     </v-footer>
