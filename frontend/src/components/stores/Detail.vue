@@ -7,12 +7,12 @@
         <v-card-title class="orange lighten-5">
             <v-list-item>
             <v-list-item-content>
-            <v-list-item-subtitle><small>음식점 : {{ name }} </small></v-list-item-subtitle>
-            <v-list-item-title class="headline my-2">전화번호 :  {{ tell }}</v-list-item-title>
+            <v-list-item-title class="headline my-2">음식점 : {{ name }} </v-list-item-title>
+            <div ><small>주소 :{{ address }}</small></div>
+            <v-list-item-subtitle>전화번호 :  {{ tel }}</v-list-item-subtitle>
             
             <v-row justify="space-around"  class="child-flex">
             <v-row>
-            <div class="ml-4"><small>주소 :{{ address }}</small></div>
             </v-row>
             <v-row>
             <v-btn color="amber" small dark fab @click="share(this.name)"><v-icon dark>mdi-share-variant</v-icon></v-btn>  
@@ -107,7 +107,7 @@ export default {
     }},
     methods:{
         writeReview(storeId) {
-            this.$router.push(`/review/${storeId}/write/`);
+            this.$router.push(`/review/${storeId}/write`);
         },
         deleteReivew(reviewid) {
             axios({
@@ -124,10 +124,7 @@ export default {
             })     
             .catch((err) => console.error(err));
         },
-        userProfile(nickname) {
-            this.$router.push(`/user/profile/${nickname}`);
-        },
-        likeStore(id){
+        likeStore(){
             axios({
                 method: "post",
                 url : SERVER.URL +"/dibs",
@@ -139,7 +136,7 @@ export default {
                     this.likestatus = !this.likestatus                        
                 )
         },
-        unlikeStore(id){
+        unlikeStore(){
             axios({
                 method: "delete",
                 url : SERVER.URL +"/dibs",
@@ -158,10 +155,11 @@ export default {
             axios
             .get(SERVER.URL +"/stores/"+this.id)
             .then((res) => {
-                this.name = res.data.name;
-                this.address = res.data.address;
-                this.tel = res.data.tel
-                this.image = res.data.image
+                console.log(res.data)
+                this.name = res.data.data.name;
+                this.address = res.data.data.address;
+                this.tel = res.data.data.tel
+                this.image = res.data.data.image
             })
             .catch((err) => console.error(err));
         },
@@ -184,13 +182,9 @@ export default {
     },
     created() {
         this.getStore()
-        .then(
-            this.getLike()
-        )
-        .then(
-            this.getReviews()
-        )
-    },
+        this.getLike()
+        this.getReviews()
+        },
 }
 </script>
 

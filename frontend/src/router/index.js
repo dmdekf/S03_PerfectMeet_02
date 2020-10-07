@@ -13,6 +13,8 @@ import notice from "../components/board/Notice.vue";
 import boardWrite from "../components/board/Write.vue";
 import boardDetail from "../components/board/Detail.vue";
 
+import storeDetail from "../components/stores/Detail.vue"
+
 import reviewWrite from "../components/review/Write.vue"
 Vue.use(BootstrapVue)
 Vue.use(Vuex)
@@ -74,6 +76,16 @@ const routes = [
     }),
     name: "boardDetail",
     component: boardDetail
+  },
+  {
+    path: "/stores/detail/:id",
+    props: ({
+      params
+    }) => ({
+      id: Number.parseInt(params.id)
+    }),
+    name: "storeDetail",
+    component: storeDetail
   },
   {
     path: "/review/:storeId/write",

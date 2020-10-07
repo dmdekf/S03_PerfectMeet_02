@@ -5,7 +5,7 @@
             <section class="post-list" >
             <div v-for="(post, id) in storeList" :key="id">
                 <div class="map-road-result" v-if="post.id">
-                    <a style="color: black">
+                    <a style="color: black" @click="storeDetail(post.id)">
                         <div class="item">
                             <div class="recom">추천{{id+1}}</div><br/>
                             
@@ -59,6 +59,9 @@ export default {
         this.getStores()
     },
     methods: {
+        storeDetail(id) {
+            this.$router.push(`/stores/detail/${id}`);
+        },
         getStores() {
             axios.get("http://j3a507.p.ssafy.io:8399/stores?loc="+this.loc+"&pur="+this.pur)
             .then((res)=>{
