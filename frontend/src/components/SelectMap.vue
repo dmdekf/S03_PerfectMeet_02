@@ -522,7 +522,7 @@
             <div class="align-area">
               <div class="center-area">
                 <a href="javascript:history.go(-1)" class="btn round big gray">이전</a>
-                <a href="selectUserInfo" class="btn round big red" id="btnNext">다음</a>
+                <a href="#" class="btn round big red" id="btnNext" @click="next">다음</a>
               </div>
             </div>
           </div>
@@ -533,6 +533,11 @@
 </template>
 <script>
   export default {
+    data: ()=>{
+      return{
+        loc:""
+      }
+    },
     methods: {
       selectGu(event){
         const svgs = document.getElementsByTagName('path');
@@ -540,9 +545,14 @@
           svgs[i].style.fill = "white";
         }
         var strId = event.currentTarget.id;
+        var l = document.getElementById(event.currentTarget.id).nextSibling;
+        this.loc = l.innerText;
         var x = document.getElementById(strId.substring(4));
         x.style.fill = "red";
         
+      },
+      next(){
+        this.$emit('next', this.loc);
       }
     },
   };
@@ -901,4 +911,4 @@ input {
     font-size: 16px;
   }
 }
-</style>    
+</style>
