@@ -133,25 +133,31 @@ export default {
             axios({
                 method: "post",
                 url : SERVER.URL +"/dibs",
-                data:{
-                    nickname:this.$store.state.nickname,
+                headers:{
+                    nickname: this.$store.state.nickname
+                },
+                params:{
                     sid:this.id
                 }                    
-            }).then(
-                    this.likestatus = !this.likestatus                        
-                )
+            }).then(() => {
+                    this.likestatus = !this.likestatus  
+                })
+                .catch((err) => console.error(err));
         },
         unlikeStore(){
             axios({
                 method: "delete",
                 url : SERVER.URL +"/dibs",
-                data:{
-                    nickname:this.$store.state.nickname,
+                headers:{
+                    nickname: this.$store.state.nickname
+                },
+                params:{
                     sid:this.id
                 }                    
-            }).then(
-                    this.likestatus = !this.likestatus                        
-                )
+            }).then(() => {
+                    this.likestatus = !this.likestatus  
+                })
+                .catch((err) => console.error(err));
         }, 
         userProfile(nickname) {
             this.$router.push(`/user/profile/${nickname}`);
@@ -170,13 +176,20 @@ export default {
             .catch((err) => console.error(err));
         },
         getLike() {
-            axios
-            .get(SERVER.URL +"/dibs/"+this.id)
-            .then((res) => {
-                console.log(res.data)
-                this.likestatus = res.data
+            axios({
+                method: "get",
+                url: SERVER.URL+"/dibs/"+this.id,
+                headers:{
+                    nickname: this.$store.state.nickname
+                },
+                params: {
+                    sid:this.id,
+                },
             })
-            .catch((err) => console.error(err));
+                .then((res) => {
+                    this.likestatus = res.data.data;
+                })
+                .catch((err) => console.error(err));
         },
         getReviews() {
             axios

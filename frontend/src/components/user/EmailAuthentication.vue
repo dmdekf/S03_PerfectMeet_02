@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
     name: 'EmailAuthentication',
     data() {
@@ -30,18 +31,22 @@ export default {
     created() {
         this.id = this.$route.query.id;
         this.key = this.$route.query.key;
-        
-        this.$store.dispatch('authentication', {
-            id: this.id,
-            key: this.key,
+        axios({
+            method: "get",
+            url: "http://j3a507.p.ssafy.io:8399/user/auth",
+            params: {
+                id:this.id,
+                key: this.key,
+            },
         })
             .then((res) => {
-                this.text = `이메일 인증이 완료되었습니다.
+                if (res.data.status) {
+                    this.text = `이메일 인증이 완료되었습니다.
                 정상적으로 서비스 이용이 가능합니다.`;
+                }
             })
-            .catch((error) => {
+            .catch(() => {
                 this.text = '이메일 인증에 실패하였습니다. 다시 시도해주세요.';
-                console.log(error.response);
             });
     },
     methods: {
