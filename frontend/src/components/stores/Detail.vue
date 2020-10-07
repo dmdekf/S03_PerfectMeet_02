@@ -1,0 +1,147 @@
+<template>
+<div id="app">
+    <v-app id="inspire">
+        <v-window class="mb-6">
+        <v-window-item class="my-6">
+        <v-card flat>
+        <v-card-title class="orange lighten-5">
+            <v-list-item>
+            <v-list-item-content>
+            <v-list-item-subtitle><small>음식점 : {{ name }} </small></v-list-item-subtitle>
+            <v-list-item-title class="headline my-2">전화번호 :  {{ tell }}</v-list-item-title>
+            
+            <v-row justify="space-around"  class="child-flex">
+            <v-row>
+            <div class="ml-4"><small>주소 :{{ address }}</small></div>
+            </v-row>
+            <v-row>
+            <v-btn color="amber" small dark fab @click="share(this.name)"><v-icon dark>mdi-share-variant</v-icon></v-btn>  
+             <!-- 좋아요 버튼-->
+            <div>
+                <div v-if="this.likestatus">
+                    <v-btn class="mx-2"
+                    fab
+                    dark
+                    small
+                    color="pink" v-on:click="unlikeStore(id)" >
+                    <v-icon>mdi-heart</v-icon>
+                    </v-btn>
+                </div>
+                <div v-else>
+                    <v-btn class="mx-2"
+                    fab
+                    dark
+                    small
+                    color="white" v-on:click="likeStore(id)">
+                    <v-icon color="pink" >mdi-heart</v-icon>
+                    </v-btn>
+                </div>
+            </div>
+            </v-row>
+                
+            </v-row>
+            </v-list-item-content>
+            </v-list-item>
+        </v-card-title>
+        
+        <v-card-text >
+            <v-list>
+                <v-list-item-icon justify="center">
+                    <v-icon color="indigo" class="mr-9">mdi-newspaper-variant-multiple-outline</v-icon>
+                    작성한 글 목록
+                </v-list-item-icon>
+                <v-divider></v-divider>
+                    <v-list-item v-for="(reivew, idx) in reivews" 
+                        
+                        @click="showDetail(reivew.id)"
+                        :key="idx">
+                    <v-list-item-content>
+                        <v-list-item-title class="mb-2">#{{idx+1}}. 점수 : {{reivew.score}}</v-list-item-title>
+                        <v-list-item-subtitle>{{ reivew.content }}</v-list-item-subtitle>
+                    </v-list-item-content>
+                            
+                    </v-list-item>  
+                    <v-divider
+                ></v-divider>
+            </v-list>
+        </v-card-text>
+        </v-card>
+    </v-window-item>
+    </v-window>
+</v-app>
+</div>
+</template>
+
+<script>
+import axios from 'axios';
+import SERVER from "@/api/api";
+export default {
+    props:{
+        id:{
+            type:Number,
+            required:true,
+        },
+    },
+    data: () => {
+        return {
+            name: '',
+            address: '',
+            tel: '',
+            image:'',
+            likestatus:false,
+    }},
+    methods:{
+        likeStore(id){
+            axios({
+                method: "post",
+                url : SERVER.URL +"/dibs",
+                data:{
+                    nickname:this.$store.state.nickname,
+                    sid:this.id
+                }                    
+            }).then(
+                    this.likestatus = !this.likestatus                        
+                )
+        },
+        unlikeStore(id){
+            axios({
+                method: "delete",
+                url : SERVER.URL +"/dibs",
+                data:{
+                    nickname:this.$store.state.nickname,
+                    sid:this.id
+                }                    
+            }).then(
+                    this.likestatus = !this.likestatus                        
+                )
+        }, 
+        userProfile(nickname) {
+            this.$router.push(`/user/profile/${nickname}`);
+        },   
+    },
+    created() {
+        console.log(this.id)
+        axios
+            .get(SERVER.URL +"/stores/"+this.id)
+            .then((res) => {
+                this.name = res.data.name;
+                this.address = res.data.address;
+                this.tel = res.data.tel
+                this.image = res.data.image
+            })
+            .catch((err) => console.error(err));
+        axios
+            .get(SERVER.URL +"/dibs/"+this.id)
+            .then((res) => {
+                this.likestatus = res.data
+            })
+            .catch((err) => console.error(err));
+        console.log("store 디테일 실행중...")
+
+    },
+}
+</script>
+
+<style>
+
+</style>
