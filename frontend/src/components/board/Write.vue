@@ -38,9 +38,9 @@ export default {
                 method: "post",
                 url: SERVER.URL+"/feature/board/write",
                 data: {
-                subject:this.board_write.subject,
-                content:this.board_write.content,
-                nickname:this.nickname
+                    subject:this.board_write.subject,
+                    content:this.board_write.content,
+                    nickname:this.nickname
                 },
             })
                 .then((res) => { 

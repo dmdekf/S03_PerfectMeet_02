@@ -19,6 +19,7 @@ export default new Vuex.Store({
     login_user: "",
     auth_token: "",
     select_map: "",
+    
     select_userinfo: {
       gender: "",
       age: "",
@@ -85,15 +86,17 @@ export default new Vuex.Store({
         .catch((err) => console.log(err.response.data));
     },
     login({ commit, getters }, loginData) {
+      console.log(loginData);
       axios({
         method: "post",
-        url: SERVER.URL + "/user/signin",
+        url: SERVER.URL + "/user/login",
         data: {
-          email: loginData.email,
-          password: loginData.password,
+          email: loginData.loginEmail,
+          password: loginData.loginPassword,
         },
       })
         .then((res) => {
+          console.log(res);
           if (res.data.status) {
             commit("SET_TOKEN", { token: res.headers["jwt-auth-token"] });
             commit("SET_EMAIL", { email: res.data.data.email });

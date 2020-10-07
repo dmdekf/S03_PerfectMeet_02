@@ -95,7 +95,7 @@ public class UserController {
 		return response;
 	}
 
-	@PostMapping("/login")
+	@PostMapping("/login") 
 	@ApiOperation(value = "로그인")
 	public Object login(@Valid @RequestBody LoginRequestDTO request, HttpServletResponse res) {
 		ResponseEntity<BasicResponse> response = null;
