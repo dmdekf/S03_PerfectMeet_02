@@ -47,19 +47,33 @@
         <v-card-text >
             <v-list>
                 <v-list-item-icon justify="center">
-                    <v-icon color="indigo" class="mr-9">mdi-newspaper-variant-multiple-outline</v-icon>
-                    작성한 글 목록
+                <v-icon color="amber darken-3" class="mr-9">mdi-newspaper-variant-multiple-outline</v-icon>
+                    리뷰 목록
                 </v-list-item-icon>
+                <v-btn class="mx-2 mt-1" dark color="indigo" v-on:click="writeReview(this.id)">
+                        <v-icon dark>mdi-pencil</v-icon>
+                        리뷰 쓰기
+                </v-btn>
                 <v-divider></v-divider>
                     <v-list-item v-for="(reivew, idx) in reivews" 
-                        
-                        @click="showDetail(reivew.id)"
                         :key="idx">
                     <v-list-item-content>
+                        <div>
+                            <div v-if="(reivew.nickname)===this.$store.state.nickname">
+                                <v-btn  v-on:click="deleteReivew(reivew.id)" icon color="red">
+                                    <v-icon>mdi-trash-can-outline</v-icon>삭제
+                                </v-btn>
+                            </div>
+                            <div v-else>
+                                <v-btn icon v-on:click="userProfile(reivew.nickname)">
+                                <v-icon>mdi-account-outline</v-icon>
+                                {{reivew.nickname}}
+                                </v-btn>
+                            </div>
+                        </div>
                         <v-list-item-title class="mb-2">#{{idx+1}}. 점수 : {{reivew.score}}</v-list-item-title>
                         <v-list-item-subtitle>{{ reivew.content }}</v-list-item-subtitle>
-                    </v-list-item-content>
-                            
+                    </v-list-item-content>          
                     </v-list-item>  
                     <v-divider
                 ></v-divider>
@@ -89,8 +103,30 @@ export default {
             tel: '',
             image:'',
             likestatus:false,
+            reivews:[],
     }},
     methods:{
+        writeReview(storeId) {
+            this.$router.push(`/review/${storeId}/write/`);
+        },
+        deleteReivew(reviewid) {
+            axios({
+                method: "delete",
+                url : SERVER.URL +`/feature/review/delete/${reviewid}`,
+                data:{
+                    id:reviewid
+                }                    
+            })
+            .then(  
+                (res) => {
+                console.log(res.data)
+                alert('리뷰가 삭제되었습니다.')
+            })     
+            .catch((err) => console.error(err));
+        },
+        userProfile(nickname) {
+            this.$router.push(`/user/profile/${nickname}`);
+        },
         likeStore(id){
             axios({
                 method: "post",
@@ -117,11 +153,9 @@ export default {
         }, 
         userProfile(nickname) {
             this.$router.push(`/user/profile/${nickname}`);
-        },   
-    },
-    created() {
-        console.log(this.id)
-        axios
+        },
+        getStore() {
+            axios
             .get(SERVER.URL +"/stores/"+this.id)
             .then((res) => {
                 this.name = res.data.name;
@@ -130,14 +164,32 @@ export default {
                 this.image = res.data.image
             })
             .catch((err) => console.error(err));
-        axios
+        },
+        getLike() {
+            axios
             .get(SERVER.URL +"/dibs/"+this.id)
             .then((res) => {
                 this.likestatus = res.data
             })
             .catch((err) => console.error(err));
-        console.log("store 디테일 실행중...")
-
+        },
+        getReviews() {
+            axios
+            .get(SERVER.URL +`/feature/review/${this.id}/list`)
+            .then((res) => {
+                this.reivews = res.data
+            })
+            .catch((err) => console.error(err));
+        }   
+    },
+    created() {
+        this.getStore()
+        .then(
+            this.getLike()
+        )
+        .then(
+            this.getReviews()
+        )
     },
 }
 </script>
