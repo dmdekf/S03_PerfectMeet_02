@@ -1,17 +1,23 @@
 <template>
     <v-app id="inspire">
-    <v-main class="mx-10px"
->
-    <div class="post">
+    <v-main class="mx-10px">
+    <div class="map-road">
             <section class="post-list" >
             <div v-for="(post, id) in storeList" :key="id">
-                <div class="post-card" v-if="post.id">
+                <div class="map-road-result" v-if="post.id">
                     <a style="color: black">
-                        <div class="contents">
-                            <h3>{{post.name}}</h3>
-                            <h3>{{post.address}}</h3>
-                            <h3>{{post.tel}}</h3>
-                            <div class="comment mt-1"><v-icon>mdi-comment-multiple-outline</v-icon>  {{post.cnt}}</div>
+                        <div class="item">
+                            <div class="recom">추천{{id+1}}</div><br/>
+                            
+                                <img v-if="id==0" src="../assets/img/gold-medal.png">
+                                <img v-if="id==1" src="../assets/img/silver-medal.png">
+                                <img v-if="id==2" src="../assets/img/bronze-medal.png">
+                            
+                            <div class="name"><h3>{{post.name}}</h3></div>
+                            <div class = "address"><v-icon>mdi-home-variant</v-icon>{{post.address}}</div>
+                            <div class = "tel"><v-icon>mdi-deskphone</v-icon>{{post.tel}}</div>
+                            <div class="review"><v-icon>mdi-comment-multiple-outline</v-icon> review </div>
+                            <hr>
                         </div> 
                     </a>
                 </div>
@@ -26,23 +32,34 @@
 import axios from "axios";
 //import SERVER from "@/api/api";
 export default {
+    props:{
+        loc:{
+            type:String,
+            required:true
+        },
+        pur:{
+            type:Number,
+            required:true
+        }
+    },
     data: () => {
         return {
             storeList:[],
-            photos: [],
+            photos: [
+                '../assets/img/gold-medal.png',
+                '../assets/img/silver-medal.png',
+                '../assets/img/bronze-medal.png',
+            ],
             limit:0,
             url:"",
-            pur:"",
-            loc:"",
         }
     },
+   
     mounted(){
         this.getStores()
     },
     methods: {
         getStores() {
-            this.loc = "강동구";
-            this.pur = 6;
             axios.get("http://j3a507.p.ssafy.io:8399/stores?loc="+this.loc+"&pur="+this.pur)
             .then((res)=>{
                     if(res.data) {
@@ -58,25 +75,13 @@ export default {
 </script>
 
 <style scoped>
-.tag-list-wrap[data-v-fbaed234] {
-    position: fixed;
-    width: max-content;
-    align-items: center;
-    padding: 0;
+.map-road-result .item { margin-top: 20px; text-align: center; }
+.map-road-result .recom { 
+    display: inline-block; padding: 0 30px; height: 40px; line-height: 40px; font-size: 18px; color:black; background-color: pink; border-radius: 99em; 
+    
 }
-.post .post-list {
-    min-height: 500px;
-    width: 80vm;
-    align-items: left;
-}
-.post .post-list > div .post-card .contents {
-  width: 100%;
-  float: left;
-  padding: 20px;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
-  border: 1px solid #000;
-  border-top: none;
-}
-
+.map-road-result .item .address { font-size: 20px; color: black; line-height: 1;
+background-size: 17px 17px; }
+.map-road-result .item .review { font-size: 20px; color: black; line-height: 1; align-self: right;
+background-size: 17px 17px; }
 </style>

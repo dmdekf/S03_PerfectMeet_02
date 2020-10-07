@@ -6,7 +6,7 @@
             <div class="map-road-choice step03">
                     <div class="item item01">
                         <label for="forWho1">
-                            <input type="radio" id="forWho1" name="forWho" value="ME">
+                            <input type="radio" id="forWho1" name="forWho" value="6">
                                 <i>
                                     <span class="img sex02"></span>
                                     <strong>
@@ -19,7 +19,7 @@
                     
                     <div class="item item02">
                         <label for="forWho2">
-                            <input type="radio" id="forWho2" name="forWho" value="PARTNER">
+                            <input type="radio" id="forWho2" name="forWho" value="7">
                             <i>
                                 <span class="img"></span>
                                 <strong>
@@ -31,7 +31,7 @@
                 
                     <div class="item item03">
                         <label for="forWho3">
-                            <input type="radio" id="forWho3" name="forWho" value="PARENTS">
+                            <input type="radio" id="forWho3" name="forWho" value="8">
                                 <i>
                                 <span class="img"></span>
                                     <strong>
@@ -44,7 +44,7 @@
                     
                     <div class="item item04">
                         <label for="forWho4">
-                            <input type="radio" id="forWho4" name="forWho" value="CHILD">
+                            <input type="radio" id="forWho4" name="forWho" value="9">
                                 <i>
                                     <span class="img"></span>
                                     <strong>
@@ -57,13 +57,26 @@
             </div>
             <div class="align-area">
                 <div class="center-area">
-                    <a href="javascript:history.go(-1)" class="btn round big gray">이전</a>
-                    <a href="javascript:void(0);" class="btn round big red" id="btnNext">다음</a>
+                    <a href="#" class="btn round big gray" @click="prev">이전</a>
+                    <a href="#" class="btn round big red" id="btnNext" @click="next">다음</a>
                 </div>
             </div>
         </div>
     </div>
 </template> 
+<script>
+export default {
+    methods: {
+        prev(){
+            this.$emit('prev');
+        },
+        next(){
+            var p = document.querySelector("input[name=forWho]:checked").value;
+            this.$emit('next', p);
+        }
+    },
+}
+</script>
 <style scoped>
 .map-road-choice { margin-top: 20px; text-align: center; }
 .map-road-choice .item { display: inline-block; vertical-align: top; margin-top: 20px; }
@@ -73,11 +86,11 @@
 .map-road-choice .item i { display: block; padding-bottom: 10px; border: 3px #fff solid; border-radius: 13px; }
 .map-road-choice .item i .img { display: block; width: 237px; height: 150px; background-repeat: no-repeat; background-position: 50% 50%; background-size: contain; }/* 200525 */
 
-.map-road-choice.step03 .item.item01 i .img.sex01 { background-image: url("../assets/img/ico_male.png"); } 
-.map-road-choice.step03 .item.item01 i .img.sex02 { background-image: url("../assets/img/ico_male.png"); } 
-.map-road-choice.step03 .item.item02 i .img { background-image: url("../assets/img/ico_male.png"); } 
-.map-road-choice.step03 .item.item03 i .img { background-image: url("../assets/img/ico_male.png"); }
-.map-road-choice.step03 .item.item04 i .img { background-image: url("../assets/img/ico_male.png"); }
+
+.map-road-choice.step03 .item.item01 i .img { background-image: url("../assets/img/wedding.png"); } 
+.map-road-choice.step03 .item.item02 i .img { background-image: url("../assets/img/teammate.png"); } 
+.map-road-choice.step03 .item.item03 i .img { background-image: url("../assets/img/couple.png"); }
+.map-road-choice.step03 .item.item04 i .img { background-image: url("../assets/img/family.png"); }
 
 .map-road-choice .item input:checked + i { border-width: 3px; border-style: solid; border-color: #d61d2a; color: #d61d2a; }
 .map-road-choice .item i em { display: block; font-family: Moebius; font-size: 16px; color: #666; }

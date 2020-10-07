@@ -39,10 +39,10 @@ import SERVER from "@/api/api";
 import { mapState } from 'vuex'
 export default {
     props:{
-    storeId:{
-        type:String,
-        required:true,
-    },
+        storeId:{
+            type:String,
+            required:true,
+        },
     },
     data () {
         return { 

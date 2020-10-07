@@ -56,10 +56,10 @@ import { mapActions } from 'vuex'
 export default {
     name:"userUpdate",
     props:{
-    nickname:{
-        type:String,
-        required:true,
-    }
+      nickname:{
+          type:String,
+          required:true,
+      }
     },
     data: () => {
       return {
