@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -106,6 +107,29 @@ public class DibsController {
 		result.message = "음식점 찜 목록 반환.";
 		result.data = storeList;
 		response = new ResponseEntity<>(result, HttpStatus.OK);
+		return response;
+	}
+	
+	@GetMapping("/{sid}")
+	@ApiOperation(value = "내가 찜한 음식점인지 확인")
+	public Object getLikeStores(@RequestHeader(value = "nickname", required = true) String nickname,@PathVariable long sid) {
+		ResponseEntity<BasicResponse> response = null;
+		Map<String, Object> errors = new HashMap<>();
+		User user = userService.selectByNickname(nickname);
+		Optional<Dibs> dibs = dibsService.selectByUidAndSid(user.getId(), sid);
+		final BasicResponse result = new BasicResponse();
+		if(!dibs.isPresent()) {
+			result.status = "E-4303";
+			result.message = "찜 안한 상태.";
+			result.data = false;
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		}else {
+			result.status = "S-200";
+			result.message = "찜한 상태.";
+			result.data = true;
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		}
+		
 		return response;
 	}
 	
