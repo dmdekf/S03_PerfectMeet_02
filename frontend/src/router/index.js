@@ -12,6 +12,7 @@ import Update from "../components/user/Update.vue";
 import notice from "../components/board/Notice.vue";
 import boardWrite from "../components/board/Write.vue";
 import boardDetail from "../components/board/Detail.vue";
+import EmailAuthentication from "../components/user/EmailAuthentication.vue";
 
 import reviewWrite from "../components/review/Write.vue"
 Vue.use(BootstrapVue)
@@ -53,6 +54,11 @@ const routes = [
     path: "/user/selectMap",
     name: "SELECTMAP",
     component: Recommand,
+  },
+  {
+    path: '/user/authentication',
+    name: 'EmailAuthentication',
+    component: EmailAuthentication,
   },
   {
     path: "/board/notice",
