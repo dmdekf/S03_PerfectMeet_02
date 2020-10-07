@@ -19,4 +19,20 @@ public class Store {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	private String name;
+	
+	private String address;
+	
+	private String tel;
+	
+	private String image;
+	
+	private Float pur1;
+	
+	private Float pur2;
+	
+	private Float pur3;
+	
+	private Float pur4;
 }
