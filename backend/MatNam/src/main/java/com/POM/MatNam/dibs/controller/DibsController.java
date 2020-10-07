@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,7 @@ import com.POM.MatNam.response.BasicResponse;
 import com.POM.MatNam.response.ErrorResponse;
 import com.POM.MatNam.review.DTO.Review;
 import com.POM.MatNam.store.dao.StoreDao;
+import com.POM.MatNam.store.dto.ResponseStore;
 import com.POM.MatNam.store.dto.Store;
 import com.POM.MatNam.user.dto.User;
 import com.POM.MatNam.user.service.UserService;
@@ -93,17 +95,41 @@ public class DibsController {
 		Map<String, Object> errors = new HashMap<>();
 		User user = userService.selectByNickname(nickname);
 		List<Dibs> list = dibsService.dibsList(user.getId());
-		List<Store> storeList  = new ArrayList<>();
+		List<ResponseStore> storeList  = new ArrayList<>();
 		for(Dibs dibs:list) {
 			long sid = dibs.getStoreId();
 			Optional<Store> s = storeDao.findById(sid);
-			storeList.add(s.get());
+			Store store = s.get();
+			storeList.add(new ResponseStore(store.getId(),store.getName(),store.getAddress(),store.getTel(),store.getImage()));
 		}
 		final BasicResponse result = new BasicResponse();
 		result.status = "S-200";
-		result.message = "음식점 찜 삭제 완료했습니다.";
+		result.message = "음식점 찜 목록 반환.";
 		result.data = storeList;
 		response = new ResponseEntity<>(result, HttpStatus.OK);
+		return response;
+	}
+	
+	@GetMapping("/{sid}")
+	@ApiOperation(value = "내가 찜한 음식점인지 확인")
+	public Object getLikeStores(@RequestHeader(value = "nickname", required = true) String nickname,@PathVariable long sid) {
+		ResponseEntity<BasicResponse> response = null;
+		Map<String, Object> errors = new HashMap<>();
+		User user = userService.selectByNickname(nickname);
+		Optional<Dibs> dibs = dibsService.selectByUidAndSid(user.getId(), sid);
+		final BasicResponse result = new BasicResponse();
+		if(!dibs.isPresent()) {
+			result.status = "E-4303";
+			result.message = "찜 안한 상태.";
+			result.data = false;
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		}else {
+			result.status = "S-200";
+			result.message = "찜한 상태.";
+			result.data = true;
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		}
+		
 		return response;
 	}
 	

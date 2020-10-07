@@ -4,14 +4,11 @@ import Vuex from "vuex";
 import BootstrapVue from "bootstrap-vue";
 
 import Main from "../components/Main.vue";
-import selectMap from "../components/SelectMap.vue";
-import selectUserInfo from "../components/SelectUserInfo.vue";
+import Recommand from '../components/Recommand.vue';
 
 import Login from "../components/user/Login.vue";
 import Profile from "../components/user/Profile.vue";
 import Update from "../components/user/Update.vue";
-import choice from "../components/SelectUserPurpose.vue";
-
 import notice from "../components/board/Notice.vue";
 import boardWrite from "../components/board/Write.vue";
 import boardDetail from "../components/board/Detail.vue";
@@ -55,23 +52,14 @@ const routes = [
   {
     path: "/user/selectMap",
     name: "SELECTMAP",
-    component: selectMap,
-  },
-  {
-    path: "/user/selectUserInfo",
-    name: "SELECTUSERINFO",
-    component: selectUserInfo,
-  },
-  {
-    path: "/user/selectUserPurpose",
-    name: "SELECTUSERPURPOSE",
-    component: choice,
+    component: Recommand,
   },
   {
     path: "/board/notice",
     name: "notice",
     component: notice,
   },
+
   {
     path: "/board/write",
     name: "boardWrite",
