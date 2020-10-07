@@ -39,6 +39,17 @@
             </v-list-item>  
             <v-divider
         ></v-divider>
+          </div>
+        <div v-else>
+            <v-list-item-icon justify="center">
+            <v-icon color="#DC143C" >mdi-heart</v-icon>
+            내가 찜한 식당
+            </v-list-item-icon>
+            <v-list-item>
+                찜한 식당이 존재하지 않습니다. 마음에 드는 식당을 찜해보세요!
+            </v-list-item>
+            <v-divider
+        ></v-divider>
         </div>
       </v-list>
     <v-list>
@@ -98,27 +109,23 @@ export default {
         getUserdata() {
             axios({
                 method: "get",
-                url: SERVER.URL+"/user",
-                data: {
-                    nickname:this.nickname
-                },
+                url: SERVER.URL+"/user?nickname="+this.nickname,
+                
             })
                 .then((res) => { 
-                    console.log(res.message)
-                    this.age = res.data.user.age,
-                    this.gender = res.data.user.gender,
-                    this.reviews = res.data.reviews,
-                    this.profileImg = res.data.user.profileImg                
+                    console.log(res.data.data)
+                    this.age = res.data.data.user.age,
+                    this.gender = res.data.data.user.gender,
+                    this.reviews = res.data.data.reivews,
+                    this.profileImg = res.data.data.user.profileImg                
                 })
                 .catch((err) => console.log(err.response.data));
         },
         getUserlikes() {
             axios({
                 method: "get",
+                headers: {'nickname': this.nickname},
                 url: SERVER.URL+"/dibs",
-                data: {
-                    nickname:this.nickname
-                },
             })
                 .then((res) => { 
                     this.likes = res.data.dibs           

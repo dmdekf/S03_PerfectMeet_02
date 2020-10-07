@@ -59,7 +59,7 @@ export default {
                 .then((res) => { 
                     console.log(res.data)
                     alert("글 작성이 성공했습니다.")
-                    this.$router.push("/");
+                     this.$router.push('/board/notice')
                 
                 })
                 .catch((err) => console.log(err.response.data));
