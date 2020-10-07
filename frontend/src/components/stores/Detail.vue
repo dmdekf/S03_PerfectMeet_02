@@ -18,13 +18,13 @@
             <v-btn color="amber" small dark fab @click="share(this.name)"><v-icon dark>mdi-share-variant</v-icon></v-btn>  
              <!-- 좋아요 버튼-->
             <div>
-                <div v-if="this.likestatus">
+                <div v-if="this.likestatus===true">
                     <v-btn class="mx-2"
                     fab
                     dark
                     small
-                    color="pink" v-on:click="unlikeStore(id)" >
-                    <v-icon>mdi-heart</v-icon>
+                    color="white" v-on:click="unlikeStore(id)" >
+                    <v-icon color="red">mdi-heart</v-icon>
                     </v-btn>
                 </div>
                 <div v-else>
@@ -32,8 +32,8 @@
                     fab
                     dark
                     small
-                    color="white" v-on:click="likeStore(id)">
-                    <v-icon color="pink" >mdi-heart</v-icon>
+                    color="pink" v-on:click="likeStore(id)">
+                    <v-icon color="white" >mdi-heart</v-icon>
                     </v-btn>
                 </div>
             </div>
@@ -50,28 +50,30 @@
                 <v-icon color="amber darken-3" class="mr-9">mdi-newspaper-variant-multiple-outline</v-icon>
                     리뷰 목록
                 </v-list-item-icon>
-                <v-btn class="mx-2 mt-1" dark color="indigo" v-on:click="writeReview(this.id)">
+                <v-btn class="mx-2 mt-1" dark color="indigo" v-on:click="writeReview(id)">
                         <v-icon dark>mdi-pencil</v-icon>
                         리뷰 쓰기
                 </v-btn>
                 <v-divider></v-divider>
-                    <v-list-item v-for="(reivew, idx) in reivews" 
+                    <v-list-item v-for="(reivew, idx) in reverseReviws" 
                         :key="idx">
                     <v-list-item-content>
                         <div>
-                            <div v-if="(reivew.nickname)===this.$store.state.nickname">
-                                <v-btn  v-on:click="deleteReivew(reivew.id)" icon color="red">
+                            <div v-if="(reivew.nickname)===nickname">
+                                <v-spacer></v-spacer>
+                                <v-btn  class="mx-2 mt-1" v-on:click="deleteReivew(idx,reivew.id)" icon color="red">
                                     <v-icon>mdi-trash-can-outline</v-icon>삭제
                                 </v-btn>
                             </div>
                             <div v-else>
+                                글쓴이 : 
                                 <v-btn icon v-on:click="userProfile(reivew.nickname)">
                                 <v-icon>mdi-account-outline</v-icon>
                                 {{reivew.nickname}}
                                 </v-btn>
                             </div>
                         </div>
-                        <v-list-item-title class="mb-2">#{{idx+1}}. 점수 : {{reivew.score}}</v-list-item-title>
+                        <v-list-item-title class="mb-2">#{{reverseReviws.length-idx}}. 평점 : {{reivew.score}}점</v-list-item-title>
                         <v-list-item-subtitle>{{ reivew.content }}</v-list-item-subtitle>
                     </v-list-item-content>          
                     </v-list-item>  
@@ -103,13 +105,15 @@ export default {
             tel: '',
             image:'',
             likestatus:false,
-            reivews:[],
+            reviews:[],
+            nickname:'',
     }},
     methods:{
         writeReview(storeId) {
             this.$router.push(`/review/${storeId}/write`);
         },
-        deleteReivew(reviewid) {
+        deleteReivew(idx,reviewid) {
+            var index = this.reviews.length-idx-1
             axios({
                 method: "delete",
                 url : SERVER.URL +`/feature/review/delete/${reviewid}`,
@@ -121,6 +125,7 @@ export default {
                 (res) => {
                 console.log(res.data)
                 alert('리뷰가 삭제되었습니다.')
+                this.reviews.splice(index, 1)
             })     
             .catch((err) => console.error(err));
         },
@@ -160,6 +165,7 @@ export default {
                 this.address = res.data.data.address;
                 this.tel = res.data.data.tel
                 this.image = res.data.data.image
+                this.nickname = this.$store.state.nickname
             })
             .catch((err) => console.error(err));
         },
@@ -167,6 +173,7 @@ export default {
             axios
             .get(SERVER.URL +"/dibs/"+this.id)
             .then((res) => {
+                console.log(res.data)
                 this.likestatus = res.data
             })
             .catch((err) => console.error(err));
@@ -175,7 +182,8 @@ export default {
             axios
             .get(SERVER.URL +`/feature/review/${this.id}/list`)
             .then((res) => {
-                this.reivews = res.data
+                console.log(res.data)
+                this.reviews = res.data
             })
             .catch((err) => console.error(err));
         }   
@@ -185,6 +193,11 @@ export default {
         this.getLike()
         this.getReviews()
         },
+    computed:{
+        reverseReviws() {
+            return this.reviews.slice().reverse()
+        }
+    },
 }
 </script>
 
