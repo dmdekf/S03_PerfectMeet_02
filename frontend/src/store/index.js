@@ -68,7 +68,7 @@ export default new Vuex.Store({
         })
         .catch((err) => console.log(err.response.data));
     },
-    signup({ commit }, signupData) {
+    signup(signupData) {
       console.log(signupData)
       axios({
         method: "post",
@@ -81,7 +81,7 @@ export default new Vuex.Store({
       })
         .then((res) => {
           if (res.data.status) {
-            commit("SET_TOKEN", res.data.key);
+            alert("인증 이메일이 전송되었습니다. 메일을 확인해주세요!")
             this.$router.push("/");
           }
         })
