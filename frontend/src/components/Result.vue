@@ -26,14 +26,22 @@
 import axios from "axios";
 //import SERVER from "@/api/api";
 export default {
+    props:{
+        loc:{
+            type:String,
+            required:true
+        },
+        pur:{
+            type:Number,
+            required:true
+        }
+    },
     data: () => {
         return {
             storeList:[],
             photos: [],
             limit:0,
             url:"",
-            pur:"",
-            loc:"",
         }
     },
     mounted(){
@@ -41,8 +49,6 @@ export default {
     },
     methods: {
         getStores() {
-            this.loc = "강동구";
-            this.pur = 6;
             axios.get("http://j3a507.p.ssafy.io:8399/stores?loc="+this.loc+"&pur="+this.pur)
             .then((res)=>{
                     if(res.data) {
