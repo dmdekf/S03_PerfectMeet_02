@@ -33,7 +33,7 @@
             <v-list-item-content>
                 <v-img src="like.image"></v-img>
                 <v-list-item-title class="mb-2">#{{idx+1}}. {{like.name}}</v-list-item-title>
-                <v-list-item-subtitle>주소 : {{ like.addres }}</v-list-item-subtitle>
+                <v-list-item-subtitle>주소 : {{ like.address }}</v-list-item-subtitle>
                 <v-list-item-subtitle>전화번호 : {{ like.tel}}</v-list-item-subtitle>
             </v-list-item-content>          
             </v-list-item>  
@@ -47,13 +47,13 @@
             작성한 글 목록
         </v-list-item-icon>
         <v-divider></v-divider>
-            <v-list-item v-for="(reivew, idx) in reivews" 
+            <v-list-item v-for="(review, idx) in reviews" 
                 
-                @click="showDetail(reivew.id)"
+                @click="showDetail(review.id)"
                 :key="idx">
             <v-list-item-content>
-                <v-list-item-title class="mb-2">#{{idx+1}}. 점수 : {{reivew.score}}</v-list-item-title>
-                <v-list-item-subtitle>{{ reivew.content }}</v-list-item-subtitle>
+                <v-list-item-title class="mb-2">#{{idx+1}}. 점수 : {{review.score}}</v-list-item-title>
+                <v-list-item-subtitle>{{ review.content }}</v-list-item-subtitle>
             </v-list-item-content>
                       
             </v-list-item>  
@@ -85,7 +85,7 @@ export default {
         return {
             age:'',
             gender:'',
-            reivews:[],
+            reviews:[],
             likes:[],
             profileImg:'',
         }
@@ -106,7 +106,7 @@ export default {
                     console.log(res.message)
                     this.age = res.data.user.age,
                     this.gender = res.data.user.gender,
-                    this.reivews = res.data.reivews,
+                    this.reviews = res.data.reviews,
                     this.profileImg = res.data.user.profileImg                
                 })
                 .catch((err) => console.log(err.response.data));

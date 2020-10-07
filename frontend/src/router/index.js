@@ -11,7 +11,7 @@ import Login from "../components/user/Login.vue";
 import Profile from "../components/user/Profile.vue";
 import Update from "../components/user/Update.vue";
 import choice from "../components/SelectUserPurpose.vue";
-
+import result from "../components/Result.vue";
 import notice from "../components/board/Notice.vue";
 import boardWrite from "../components/board/Write.vue";
 import boardDetail from "../components/board/Detail.vue";
@@ -66,6 +66,11 @@ const routes = [
     path: "/user/selectUserPurpose",
     name: "SELECTUSERPURPOSE",
     component: choice,
+  },
+  {
+    path: "/result",
+    name: "RESULT",
+    component: result,
   },
   {
     path: "/board/notice",

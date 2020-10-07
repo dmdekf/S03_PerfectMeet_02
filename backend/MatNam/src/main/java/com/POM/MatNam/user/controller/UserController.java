@@ -145,7 +145,7 @@ public class UserController {
 			result.status = "S-200";
 			result.message = "회원 정보 조회에 성공했습니다.";
 			data.put("user", user);
-			data.put("reivews",reviews);
+			data.put("reviews",reviews);
 			result.data = data;
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		}

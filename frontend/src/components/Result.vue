@@ -4,33 +4,18 @@
 >
     <div class="post">
             <section class="post-list" >
-            <div v-for="(post, uid) in list" :key="uid">
-                <div class="post-card" v-if="post.id" v-on:click="showDetail(post.id)" >
+            <div v-for="(post, id) in storeList" :key="id">
+                <div class="post-card" v-if="post.id">
                     <a style="color: black">
                         <div class="contents">
-                        <v-row>
-                            <v-col>
-                                <v-icon>mdi-account-edit-outline</v-icon>  {{post.uid}}
-                            </v-col>
-                            <v-col cols="auto">
-                            <v-btn color="#DC143C" fab x-small dark>
-                                <v-icon>mdi-heart</v-icon>{{post.lnt}}
-                            </v-btn>
-                            </v-col>
-                        </v-row>
-                            <h3>#{{post.id}}</h3>
-                            <h3>
-                                {{post.subject}}
-                            </h3>
-                            <hr/> 
-                            <p class="content" v-html="post.content">{{post.content}}</p>
-                            
+                            <h3>{{post.name}}</h3>
+                            <h3>{{post.address}}</h3>
+                            <h3>{{post.tel}}</h3>
                             <div class="comment mt-1"><v-icon>mdi-comment-multiple-outline</v-icon>  {{post.cnt}}</div>
                         </div> 
                     </a>
                 </div>
             </div>
-            
             </section>
         </div>
     </v-main>
@@ -39,31 +24,30 @@
 
 <script>
 import axios from "axios";
-import SERVER from "@/api/api";
-
+//import SERVER from "@/api/api";
 export default {
-    name:"MAIN",
     data: () => {
         return {
-            posts:[],
-            list:[],
+            storeList:[],
             photos: [],
             limit:0,
-            url:""
+            url:"",
+            pur:"",
+            loc:"",
         }
     },
     mounted(){
-        this.getPosts()
+        this.getStores()
     },
     methods: {
-        
-        getPosts() {
-            this.nickName = this.$store.state.login_user;
-            axios.get(SERVER.URL+"/feature/board/list/")
+        getStores() {
+            this.loc = "강동구";
+            this.pur = 6;
+            axios.get("http://j3a507.p.ssafy.io:8399/stores?loc="+this.loc+"&pur="+this.pur)
             .then((res)=>{
                     if(res.data) {
-                        this.posts = res.data;
-                                              
+                        console.log(res.data);
+                        this.storeList = res.data.data;  
                     }
             })
             .catch((err) => console.error(err));
@@ -85,4 +69,14 @@ export default {
     width: 80vm;
     align-items: left;
 }
+.post .post-list > div .post-card .contents {
+  width: 100%;
+  float: left;
+  padding: 20px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  border: 1px solid #000;
+  border-top: none;
+}
+
 </style>
