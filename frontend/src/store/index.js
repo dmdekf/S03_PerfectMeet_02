@@ -5,6 +5,7 @@ import axios from "axios";
 
 import router from "@/router";
 import SERVER from "@/api/api";
+import createPersistedState from "vuex-persistedstate";
 
 // const storagesession = window.sessionStorage;
 // const storagelocal = window.localStorage;
@@ -27,6 +28,7 @@ export default new Vuex.Store({
     data_list: "",
     board_lists: []
   },
+  plugins: [createPersistedState()],
   getters: {
     info: (state) => ({
       status: state.status,
