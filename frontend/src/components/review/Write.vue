@@ -15,9 +15,7 @@
                     step="1"
                     thumb-label="always"
                 ></v-slider>
-                </v-card-text>
-                <v-text-field :counter="50" label="제목" name="subject" :rules="[rules.required]" v-model="board_write.subject" maxlength="50" >
-                </v-text-field> 
+                </v-card-text> 
                 </v-row> 
                 <v-row class="mx-4"> 내용 </v-row>
                 <v-row class="mx-4"> 
