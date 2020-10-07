@@ -10,7 +10,7 @@
             {{ nickname }}님의 Profile Page
         <div v-if="(nickname)===this.$store.state.nickname">
             <div class="my-2">
-                <v-btn color="primary" v-on:click="userUpdate(this.$store.state.nickname)">회원 정보 수정하기</v-btn>
+                <v-btn color="primary" v-on:click="userUpdate">회원 정보 수정하기</v-btn>
             </div>
         </div>
         <v-img src="https://picsum.photos/200/300" >
@@ -91,7 +91,8 @@ export default {
         }
     },
     methods: {
-        userUpdate(nickname){
+        userUpdate(){
+            const nickname = this.$store.state.nickname
             this.$router.push(`/user/update/${nickname}`);
         },
         getUserdata() {

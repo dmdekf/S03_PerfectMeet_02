@@ -2,13 +2,12 @@ import Vue from "vue";
 import Vuex from "vuex";
 
 import axios from "axios";
-// import Cookies from 'js-cookie'
 
 import router from "@/router";
-// import createPersistedState from 'vuex-persistedstate';
-const storagesession = window.sessionStorage;
-const storagelocal = window.localStorage;
 import SERVER from "@/api/api";
+
+// const storagesession = window.sessionStorage;
+// const storagelocal = window.localStorage;
 Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
@@ -68,6 +67,7 @@ export default new Vuex.Store({
         .catch((err) => console.log(err.response.data));
     },
     signup({ commit }, signupData) {
+      console.log(signupData)
       axios({
         method: "post",
         url: SERVER.URL + "/user",
@@ -99,9 +99,9 @@ export default new Vuex.Store({
           console.log(res);
           if (res.data.status) {
             commit("SET_TOKEN", { token: res.headers["jwt-auth-token"] });
-            commit("SET_EMAIL", { email: res.data.data.email });
-            commit("SET_USER", { login_user: res.data.data.uid });
-            commit("SET_STATUS", { status: res.data.status });
+            commit("SET_NICKNAME", {
+              nickname: res.headers["nickname"]
+            });
             getters.config;
             router.push({ name: "MAIN" });
           }
@@ -110,70 +110,15 @@ export default new Vuex.Store({
           console.log(e.response.data);
         });
     },
-    sociallogin({ commit }, loginData) {
-      commit("SET_AUTHTOKEN", { auth_token: loginData.auth_token });
-      const email = loginData.email;
-      axios({
-        method: "post",
-        url: SERVER.URL + "/user/socialsignin",
-        data: {
-          email,
-        },
-      })
-        .then((res) => {
-          if (res.data.status) {
-            commit("SET_TOKEN", { token: res.headers["jwt-auth-token"] });
-            commit("SET_EMAIL", { email: res.data.data.email });
-            commit("SET_USER", { login_user: res.data.data.uid });
-            commit("SET_STATUS", { status: res.data.status });
-          } else {
-            alert("error");
-          }
-        })
-        .catch(function(error) {
-          if (error.response) {
-            console.log(error.response.data);
-          } else {
-            console.log(error.request);
-          }
-        })
-        .then(() => {
-          router.push({ name: "MAIN" });
-        });
-    },
-    logout({ commit, state }) {
+    logout({ commit }) {
+      
       commit("SET_TOKEN", { token: "" });
-      commit("SET_EMAIL", { email: "" });
-      commit("SET_USER", { login_user: "" });
+      commit("SET_NICKNAME", { nickname: "" });
       commit("SET_STATUS", { status: "" });
-      if (state.auth_token) {
-        axios({
-          method: "POST",
-          url:
-            "https://cors-anywhere.herokuapp.com/https://kapi.kakao.com/v1/user/logout",
-          headers: {
-            Authorization: "Bearer " + state.auth_token,
-            "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
-          },
-        })
-          .then(() => {
-            commit("SET_AUTHTOKEN", { auth_token: "" });
-          })
-          .catch(function(error) {
-            if (error.response) {
-              console.log(error.response.data);
-            } else {
-              console.log(error.request);
-            }
-          })
-          .then(() => {
-            storagesession.clear();
-            storagelocal.clear();
-          })
-          .then(() => {
-            router.push({ name: "MAIN" });
-          });
-      }
+      router.push({
+          name: "MAIN"
+        });
+      alert('로그아웃 되었습니다.')
     },
     getBoardLists({
       state
