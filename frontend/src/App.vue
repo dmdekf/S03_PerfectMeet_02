@@ -43,14 +43,14 @@
       </v-btn>
       <v-spacer></v-spacer>
       <div v-if="isLoggedIn">
-          <small class="font-weight-bold">{{ this.$store.state.login_user }}</small>님 환영합니다.
+          <small class="font-weight-bold">{{ this.$store.state.nickname }}</small>님 환영합니다.
           <v-btn rounded class="ma-2" color="primary" to="/search" >
             <v-icon>mdi-magnify</v-icon>검색하기
           </v-btn>
-          <v-btn class="ma-2" outlined color="white" to="/user/logout" >
+          <v-btn class="ma-2" outlined color="white" v-on:click="logout">
             로그아웃
           </v-btn>
-          <v-btn class="ma-2" outlined color="white" to="/user/profile">
+          <v-btn class="ma-2" outlined color="white" v-on:click="userProfile">
             프로필
           </v-btn>
           </div>
@@ -96,7 +96,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'App',
   computed: {
@@ -109,6 +109,13 @@ export default {
     drawer: false,
     
   }),
+  methods:{
+    ...mapActions(['logout']),
+    userProfile(){
+      const nickname = this.$store.state.nickname
+            this.$router.push(`/user/profile/${nickname}`);
+        },
+  }
 }
 </script>
 
