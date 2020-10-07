@@ -122,6 +122,28 @@ export default new Vuex.Store({
         });
       alert('로그아웃 되었습니다.')
     },
+    authentication({ }, { id, key }) {
+      return new Promise((resolve, reject) => {
+          axios({
+              method: 'get',
+              url: '/user/auth',
+              params: {
+                  id,
+                  key,
+              }
+          })
+              .then((response) => {
+                  if (200 <= response.status && response.status < 300) {
+                      resolve(response);
+                  } else {
+                      reject(response);
+                  }
+              })
+              .catch((error) => {
+                  reject(error);
+              });
+      });
+    },
     getBoardLists({
       state
     }) {
