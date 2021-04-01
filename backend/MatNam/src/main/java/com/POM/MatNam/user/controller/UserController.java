@@ -78,7 +78,7 @@ public class UserController {
 			try {
 				UserAuth user = userService.signup(request,key);
 				mailSendService.mailSendWithUserKey(user.getEmail(), user.getNickname(), key, user.getId());
-				
+				 
 			}catch(MessagingException e) {
 				errors.put("field", "sendMail");
 
@@ -95,7 +95,7 @@ public class UserController {
 		return response;
 	}
 
-	@PostMapping("/login")
+	@PostMapping("/login") 
 	@ApiOperation(value = "로그인")
 	public Object login(@Valid @RequestBody LoginRequestDTO request, HttpServletResponse res) {
 		ResponseEntity<BasicResponse> response = null;
@@ -145,7 +145,7 @@ public class UserController {
 			result.status = "S-200";
 			result.message = "회원 정보 조회에 성공했습니다.";
 			data.put("user", user);
-			data.put("reivews",reviews);
+			data.put("reviews",reviews);
 			result.data = data;
 			response = new ResponseEntity<>(result, HttpStatus.OK);
 		}

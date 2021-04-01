@@ -44,7 +44,7 @@ public class UserService {
 		if (userDao.findByEmail(email).isPresent() || authDao.findByEmail(email).isPresent()) {
 			return 1;
 		} else if (userDao.findByNickname(nickname).isPresent() || authDao.findByNickname(nickname).isPresent()) {
-			return 2;
+			return 2; 
 		}
 		return 3;
 	}
